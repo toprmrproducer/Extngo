@@ -5,6 +5,7 @@ import HeroSafe from '@/components/HeroSafe'
 import PinnedProduct from '@/components/PinnedProduct'
 import ProductDetail from '@/components/ProductDetail'
 import ProductDifferences from '@/components/ProductDifferences'
+import WhoItsFor from '@/components/WhoItsFor'
 
 export default function Home() {
   const [heroVisible, setHeroVisible] = useState(true)
@@ -58,6 +59,10 @@ export default function Home() {
         </div>
 
         <PinnedProduct />
+
+        <div data-screen-label="04 Who It's For">
+          <WhoItsFor />
+        </div>
       </div>
     </>
   )
