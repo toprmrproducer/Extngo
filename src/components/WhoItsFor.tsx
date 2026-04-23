@@ -110,7 +110,7 @@ const STATS = [
 
 const CARD_GAP = 16
 const VISIBLE_COUNT = 3
-const CARD_HEIGHT = 480 // fixed container height — no layout jump
+const CARD_HEIGHT = 560 // fixed container height — no layout jump
 
 export default function WhoItsFor() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -147,6 +147,10 @@ export default function WhoItsFor() {
           background: #F5F3EF;
           padding: clamp(72px, 10vh, 120px) clamp(40px, 6vw, 96px);
           overflow: hidden;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
         }
 
         .wif-grid {
