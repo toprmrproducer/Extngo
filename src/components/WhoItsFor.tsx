@@ -79,7 +79,7 @@ const CARDS = [
     sub: 'Under carpet routing',
     bg: '#1A1F2E',
     icon: <HotelIcon />,
-    image: null,
+    image: '/Hotel.jpeg',
   },
   {
     title: 'Trade Shows & Events',
@@ -88,7 +88,7 @@ const CARDS = [
     sub: 'Fast deploy & retract',
     bg: '#2A1F14',
     icon: <EventIcon />,
-    image: null,
+    image: '/Event.jpeg',
   },
   {
     title: 'Home Office',
@@ -97,7 +97,7 @@ const CARDS = [
     sub: 'Clean desk setups',
     bg: '#1E1428',
     icon: <HomeOfficeIcon />,
-    image: null,
+    image: '/House.jpeg',
   },
 ]
 
@@ -403,13 +403,13 @@ export default function WhoItsFor() {
               Extngo fits wherever cables need to run and retract. Built for pros who can&apos;t afford downtime or trip hazards.
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <button className="btn btn-primary" style={{ fontSize: 14, padding: '13px 22px' }}>
+              <button className="btn btn-primary" style={{ fontSize: 14, padding: '13px 32px' }}>
                 Shop Now
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                 </svg>
               </button>
-              <button className="btn btn-ghost" style={{ fontSize: 14, padding: '13px 22px' }}>
+              <button className="btn btn-ghost" style={{ fontSize: 14, padding: '13px 32px' }}>
                 See All Use Cases
               </button>
             </div>
