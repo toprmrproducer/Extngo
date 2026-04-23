@@ -453,3 +453,19 @@ body {
   }
 }
 
+/* Navbar mobile */
+@media (max-width: 768px) {
+  nav .nav-center {
+    display: none !important;
+  }
+  nav .nav-cta {
+    display: none !important;
+  }
+  nav .nav-hamburger {
+    display: flex !important;
+  }
+  nav {
+    padding: 18px 24px !important;
+  }
+}
+

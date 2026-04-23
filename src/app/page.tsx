@@ -6,6 +6,8 @@ import PinnedProduct from '@/components/PinnedProduct'
 import ProductDetail from '@/components/ProductDetail'
 import ProductDifferences from '@/components/ProductDifferences'
 import WhoItsFor from '@/components/WhoItsFor'
+import Testimonials from '@/components/Testimonials'
+import NavBar from '@/components/NavBar'
 
 export default function Home() {
   const [heroVisible, setHeroVisible] = useState(true)
@@ -19,6 +21,9 @@ export default function Home() {
 
   return (
     <>
+      {/* Fixed navbar — always on top */}
+      <NavBar delayBase={0.05} />
+
       {/* Fixed hero background — unmounted once scrolled past */}
       {heroVisible && (
         <div
@@ -62,6 +67,10 @@ export default function Home() {
 
         <div data-screen-label="04 Who It's For">
           <WhoItsFor />
+        </div>
+
+        <div data-screen-label="05 Testimonials">
+          <Testimonials />
         </div>
       </div>
     </>

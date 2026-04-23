@@ -2,7 +2,6 @@
 
 import HeroScene from './HeroScene'
 import GiantWordmark from './GiantWordmark'
-import NavBar from './NavBar'
 import Word from './Word'
 
 interface HeroSafeProps {
@@ -59,7 +58,8 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
       />
 
       <div style={{ position: 'relative', zIndex: 4, display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <NavBar delayBase={0.05} />
+        {/* spacer for fixed nav */}
+        <div style={{ height: 72 }} />
 
         <div
           style={{
