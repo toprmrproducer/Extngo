@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { m, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 interface GiantWordmarkProps {
   shown?: boolean
@@ -8,83 +9,75 @@ interface GiantWordmarkProps {
 }
 
 export default function GiantWordmark({ shown = true, tone = 'light' }: GiantWordmarkProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const [scrollScale, setScrollScale] = useState(0.75) // Start at 75% size
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // ── Mouse parallax — MotionValues, zero React re-renders ──────────────────
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // Spring smoothing gives the "floating on water" lag
+  const springX = useSpring(mouseX, { stiffness: 60, damping: 18, restDelta: 0.001 })
+  const springY = useSpring(mouseY, { stiffness: 60, damping: 18, restDelta: 0.001 })
+
+  // Map normalised mouse pos (-0.5 → 0.5) to pixel offset
+  const tx = useTransform(springX, [-0.5, 0.5], [-28, 28])
+  const ty = useTransform(springY, [-0.5, 0.5], [-16, 16])
+
+  // ── Scroll scale — MotionValue, zero React re-renders ─────────────────────
+  const scrollProgress = useMotionValue(0)
+  const scale = useTransform(scrollProgress, [0, 1], [0.75, 1.5])
+  const smoothScale = useSpring(scale, { stiffness: 80, damping: 22, restDelta: 0.001 })
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    const container = el.offsetParent || el.parentElement
+    const container = containerRef.current?.offsetParent as HTMLElement | null
+      || containerRef.current?.parentElement as HTMLElement | null
     if (!container) return
 
-    let raf = 0
     const onMove = (e: MouseEvent) => {
-      const r = (container as HTMLElement).getBoundingClientRect()
-      const cx = e.clientX - r.left - r.width / 2
-      const cy = e.clientY - r.top - r.height / 2
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => {
-        setPos({ x: cx / r.width, y: cy / r.height })
-      })
+      const r = container.getBoundingClientRect()
+      mouseX.set((e.clientX - r.left - r.width / 2) / r.width)
+      mouseY.set((e.clientY - r.top - r.height / 2) / r.height)
     }
-    const onLeave = () => setPos({ x: 0, y: 0 })
+    const onLeave = () => { mouseX.set(0); mouseY.set(0) }
 
-    container.addEventListener('mousemove', onMove as any)
+    container.addEventListener('mousemove', onMove)
     container.addEventListener('mouseleave', onLeave)
-
     return () => {
-      container.removeEventListener('mousemove', onMove as any)
+      container.removeEventListener('mousemove', onMove)
       container.removeEventListener('mouseleave', onLeave)
-      cancelAnimationFrame(raf)
     }
-  }, [])
+  }, [mouseX, mouseY])
 
-  // Scroll-based scale effect
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const windowHeight = window.innerHeight
-      // Scale from 0.75 to 1.5 as user scrolls through first viewport
-      const scale = 0.75 + Math.min((scrollY / windowHeight) * 0.75, 0.75)
-      setScrollScale(scale)
+    const onScroll = () => {
+      scrollProgress.set(Math.min(window.scrollY / window.innerHeight, 1))
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // Initial call
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [scrollProgress])
 
   if (!shown) return null
 
   const color = tone === 'light' ? 'rgba(26,26,26,1)' : 'rgba(255,255,255,1)'
-  const anim = tone === 'light' ? 'heroWordmark' : 'heroWordmarkDark'
-  const tx = -pos.x * 28
-  const ty = -pos.y * 16
-
-  // Gradient colors based on tone
   const gradientStart = tone === 'light' ? 'rgba(26,26,26,0)' : 'rgba(255,255,255,0)'
-  const gradientEnd = tone === 'light' ? 'rgba(26,26,26,1)' : 'rgba(255,255,255,1)'
+  const gradientEnd   = tone === 'light' ? 'rgba(26,26,26,1)' : 'rgba(255,255,255,1)'
+  const targetOpacity = tone === 'light' ? 0.09 : 0.13
 
   return (
     <div
-      ref={ref}
-      className="giant-wordmark hero-display"
+      ref={containerRef}
       style={{
         position: 'absolute',
         top: '84px',
-        left: 0,
-        right: 0,
+        left: 0, right: 0,
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        fontSize: '22vw',
-        fontWeight: 700,
+        fontSize: 'clamp(18vw, 22vw, 26vw)',
+        fontWeight: 900,
+        fontFamily: 'var(--font-bricolage)',
         color,
-        opacity: 0,
-        animation: `${anim} 1.6s .2s cubic-bezier(.2,.7,.2,1) forwards`,
         pointerEvents: 'none',
         userSelect: 'none',
         whiteSpace: 'nowrap',
@@ -94,19 +87,24 @@ export default function GiantWordmark({ shown = true, tone = 'light' }: GiantWor
         willChange: 'transform',
       }}
     >
-      <span
+      <m.span
+        initial={{ opacity: 0, scale: 1.06 }}
+        animate={{ opacity: targetOpacity, scale: 1 }}
+        transition={{ duration: 1.6, delay: 0.2, ease: [0.2, 0.7, 0.2, 1] }}
         style={{
           display: 'inline-block',
-          transform: `translate3d(${tx}px, ${ty}px, 0) scale(${scrollScale})`,
-          transition: 'transform .4s cubic-bezier(.2,.7,.3,1)',
+          x: tx,
+          y: ty,
+          scale: smoothScale,
           background: `linear-gradient(to top, ${gradientStart} 0%, ${gradientEnd} 40%)`,
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
+          willChange: 'transform',
         }}
       >
         EXTNGO
-      </span>
+      </m.span>
     </div>
   )
 }

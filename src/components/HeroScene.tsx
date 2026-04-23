@@ -1,7 +1,8 @@
 'use client'
 
-import { CSSProperties } from 'react'
+import { CSSProperties, useEffect } from 'react'
 import Image from 'next/image'
+import { m, useMotionValue, useTransform, useSpring } from 'framer-motion'
 
 interface HeroSceneProps {
   style?: CSSProperties
@@ -9,14 +10,27 @@ interface HeroSceneProps {
 }
 
 export default function HeroScene({ style = {}, kenBurns = true }: HeroSceneProps) {
+  // Scroll-driven parallax — image moves up slower than scroll (depth effect)
+  const scrollY = useMotionValue(0)
+  const rawY = useTransform(scrollY, [0, 600], [0, 80])
+  const y = useSpring(rawY, { stiffness: 80, damping: 20, restDelta: 0.001 })
+
+  useEffect(() => {
+    const update = () => scrollY.set(window.scrollY)
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [scrollY])
+
   return (
     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', ...style }}>
-      <div
+      <m.div
         style={{
           position: 'absolute',
-          inset: 0,
-          animation: kenBurns ? 'heroKen 14s ease-out forwards' : 'none',
+          inset: '-10% 0',   // extra height so parallax doesn't show gaps
+          y,
+          animation: kenBurns ? 'heroKen 18s linear forwards' : 'none',
           transformOrigin: '60% 55%',
+          willChange: 'transform',
         }}
       >
         <Image
@@ -24,18 +38,16 @@ export default function HeroScene({ style = {}, kenBurns = true }: HeroSceneProp
           alt="Hero background"
           fill
           priority
-          style={{
-            objectFit: 'cover',
-            objectPosition: 'center 60%',
-          }}
+          style={{ objectFit: 'cover', objectPosition: 'center 60%' }}
         />
-      </div>
+      </m.div>
+
+      {/* Gradient overlay */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background:
-            'linear-gradient(180deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,.1) 30%, rgba(0,0,0,.1) 70%, rgba(0,0,0,.25) 100%)',
+          background: 'linear-gradient(180deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,.1) 30%, rgba(0,0,0,.1) 70%, rgba(0,0,0,.25) 100%)',
           pointerEvents: 'none',
         }}
       />

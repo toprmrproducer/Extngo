@@ -2,205 +2,190 @@
 
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { m, LazyMotion, domAnimation } from 'framer-motion'
+
+// Lerp helper
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+
+// Cubic ease-in-out
+const easeInOut = (t: number) =>
+  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
 
 export default function PinnedProduct() {
   const wrapRef = useRef<HTMLDivElement>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
   const rafRef = useRef(0)
+  const readyRef = useRef(false)
+
+  // Lerp targets — updated from anchor rects
+  const target = useRef({ x: 0, y: 0, w: 0, h: 0 })
+  // Current interpolated values
+  const current = useRef({ x: 0, y: 0, w: 0, h: 0 })
 
   useEffect(() => {
     const wrap = wrapRef.current
-    const inner = innerRef.current
-    if (!wrap || !inner) return
+    if (!wrap) return
 
-    const update = () => {
-      const heroA = document.querySelector('[data-product-anchor="hero"]')
-      const detailA = document.querySelector('[data-product-anchor="detail"]')
-      const orangeA = document.querySelector('[data-product-anchor="orange"]')
-      const detailSection = document.getElementById('product-detail')
+    // Base size — set once on first valid read, used for scale calculation
+    const baseSize = { w: 0, h: 0 }
+
+    const readAnchors = () => {
+      const heroA   = document.querySelector<HTMLElement>('[data-product-anchor="hero"]')
+      const detailA = document.querySelector<HTMLElement>('[data-product-anchor="detail"]')
+      const orangeA = document.querySelector<HTMLElement>('[data-product-anchor="orange"]')
       const diffSection = document.getElementById('product-differences')
 
-      let x: number, y: number, w: number, h: number
+      if (!detailA && !orangeA) {
+        wrap.style.opacity = '0'
+        return
+      }
+
+      const vh = window.innerHeight
+
+      let tx: number, ty: number, tw: number, th: number
 
       if (heroA && detailA && orangeA) {
         const hr = heroA.getBoundingClientRect()
         const dr = detailA.getBoundingClientRect()
         const or = orangeA.getBoundingClientRect()
-        const vh = window.innerHeight
-        
-        // Hero to Detail transition
-        const start1 = vh * 0.8
-        const end1 = vh * 0.3
-        let p1 = 0
-        if (dr.top <= start1) {
-          p1 = (start1 - dr.top) / (start1 - end1)
-        }
-        p1 = Math.max(0, Math.min(1, p1))
-        
-        // Detail to Differences transition
-        const start2 = vh * 1.0
-        const end2 = vh * 0.5
-        let p2 = 0
-        if (or.top <= start2 && p1 >= 1) {
-          p2 = (start2 - or.top) / (start2 - end2)
-        }
-        p2 = Math.max(0, Math.min(1, p2))
-        
-        // Enhanced easing for smoother animation
-        const e1 = p1 < 0.5 
-          ? 4 * p1 * p1 * p1 
-          : 1 - Math.pow(-2 * p1 + 2, 3) / 2
-        
-        const e2 = p2 < 0.5 
-          ? 4 * p2 * p2 * p2 
-          : 1 - Math.pow(-2 * p2 + 2, 3) / 2
+
+        // Phase 1: hero → detail
+        const p1 = Math.max(0, Math.min(1, (vh * 0.8 - dr.top) / (vh * 0.5)))
+        const e1 = easeInOut(p1)
+
+        // Phase 2: detail → orange (only starts when p1 is complete)
+        const p2 = p1 >= 1
+          ? Math.max(0, Math.min(1, (vh * 1.0 - or.top) / (vh * 0.5)))
+          : 0
+        const e2 = easeInOut(p2)
 
         if (p2 > 0) {
-          // Transitioning from detail to differences
-          const dx = dr.left + (or.left - dr.left) * e2
-          const dy = dr.top + (or.top - dr.top) * e2
-          const dw = dr.width + (or.width - dr.width) * e2
-          const dh = dr.height + (or.height - dr.height) * e2
-          x = dx
-          y = dy
-          w = dw
-          h = dh
+          tx = dr.left + (or.left - dr.left) * e2
+          ty = dr.top  + (or.top  - dr.top)  * e2
+          tw = dr.width  + (or.width  - dr.width)  * e2
+          th = dr.height + (or.height - dr.height) * e2
         } else {
-          // Transitioning from hero to detail
-          x = hr.left + (dr.left - hr.left) * e1
-          y = hr.top + (dr.top - hr.top) * e1
-          w = hr.width + (dr.width - hr.width) * e1
-          h = hr.height + (dr.height - hr.height) * e1
+          tx = hr.left + (dr.left - hr.left) * e1
+          ty = hr.top  + (dr.top  - hr.top)  * e1
+          tw = hr.width  + (dr.width  - hr.width)  * e1
+          th = hr.height + (dr.height - hr.height) * e1
         }
       } else if (detailA && orangeA) {
         const dr = detailA.getBoundingClientRect()
         const or = orangeA.getBoundingClientRect()
-        const vh = window.innerHeight
-        const start = vh * 1.0
-        const end = vh * 0.5
-        let p = 0
-        if (or.top <= start) {
-          p = (start - or.top) / (start - end)
-        }
-        p = Math.max(0, Math.min(1, p))
-        const e = p < 0.5 
-          ? 4 * p * p * p 
-          : 1 - Math.pow(-2 * p + 2, 3) / 2
-        
-        x = dr.left + (or.left - dr.left) * e
-        y = dr.top + (or.top - dr.top) * e
-        w = dr.width + (or.width - dr.width) * e
-        h = dr.height + (or.height - dr.height) * e
+        const e = easeInOut(Math.max(0, Math.min(1, (vh * 1.0 - or.top) / (vh * 0.5))))
+        tx = dr.left + (or.left - dr.left) * e
+        ty = dr.top  + (or.top  - dr.top)  * e
+        tw = dr.width  + (or.width  - dr.width)  * e
+        th = dr.height + (or.height - dr.height) * e
       } else if (detailA) {
         const dr = detailA.getBoundingClientRect()
-        x = dr.left
-        y = dr.top
-        w = dr.width
-        h = dr.height
-      } else if (orangeA) {
-        const or = orangeA.getBoundingClientRect()
-        x = or.left
-        y = or.top
-        w = or.width
-        h = or.height
+        tx = dr.left; ty = dr.top; tw = dr.width; th = dr.height
       } else {
-        wrap.style.opacity = '0'
-        wrap.style.visibility = 'hidden'
-        return
+        const or = orangeA!.getBoundingClientRect()
+        tx = or.left; ty = or.top; tw = or.width; th = or.height
       }
 
-      wrap.style.transform = `translate3d(${x}px, ${y}px, 0)`
-      wrap.style.width = `${w}px`
-      wrap.style.height = `${h}px`
+      target.current = { x: tx, y: ty, w: tw, h: th }
 
-      // Hide when past differences section
+      // Set base size once
+      if (!baseSize.w && tw > 0) { baseSize.w = tw; baseSize.h = th }
+
+      // Visibility: hide when scrolled past differences section
       if (diffSection) {
-        const sr = diffSection.getBoundingClientRect()
-        const past = sr.bottom <= 0
+        const past = diffSection.getBoundingClientRect().bottom <= 0
         wrap.style.opacity = past ? '0' : '1'
-        wrap.style.visibility = past ? 'hidden' : 'visible'
-      } else if (detailSection) {
-        const sr = detailSection.getBoundingClientRect()
-        const past = sr.bottom <= 0
-        wrap.style.opacity = past ? '0' : '1'
-        wrap.style.visibility = past ? 'hidden' : 'visible'
-      } else {
-        wrap.style.opacity = '1'
-        wrap.style.visibility = 'visible'
-      }
-
-      if (!wrap.dataset.ready && w > 0) {
-        wrap.dataset.ready = '1'
-        inner.style.animation = 'pinnedProductIn 1.2s .3s cubic-bezier(.16,.84,.44,1) forwards'
+        wrap.style.pointerEvents = past ? 'none' : 'none'
       }
     }
 
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current)
-      rafRef.current = requestAnimationFrame(update)
+    const tick = () => {
+      readAnchors()
+
+      const t = target.current
+      const c = current.current
+      const LERP = 0.12  // smoothing factor — lower = more lag/spring feel
+
+      c.x = lerp(c.x, t.x, LERP)
+      c.y = lerp(c.y, t.y, LERP)
+      c.w = lerp(c.w, t.w, LERP)
+      c.h = lerp(c.h, t.h, LERP)
+
+      if (c.w > 1) {
+        // Use transform-only: translate for position, scale for size
+        // This keeps everything on the compositor thread
+        if (!baseSize.w) { baseSize.w = c.w; baseSize.h = c.h }
+        const sx = c.w / baseSize.w
+        const sy = c.h / baseSize.h
+        wrap.style.transform = `translate3d(${c.x}px, ${c.y}px, 0) scale(${sx}, ${sy})`
+        wrap.style.width  = `${baseSize.w}px`
+        wrap.style.height = `${baseSize.h}px`
+
+        if (!readyRef.current) {
+          readyRef.current = true
+          wrap.style.opacity = '1'
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(tick)
     }
 
-    update()
-    const t = setTimeout(update, 80)
-    const t2 = setTimeout(update, 300)
-    const t3 = setTimeout(update, 800)
+    // Kick off the loop
+    rafRef.current = requestAnimationFrame(tick)
 
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
+    // Also re-read on resize (anchor positions change)
+    const onResize = () => {
+      // Reset base size so scale recalculates
+      baseSize.w = 0; baseSize.h = 0
+      readyRef.current = false
+    }
+    window.addEventListener('resize', onResize)
 
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
       cancelAnimationFrame(rafRef.current)
-      clearTimeout(t)
-      clearTimeout(t2)
-      clearTimeout(t3)
+      window.removeEventListener('resize', onResize)
     }
   }, [])
 
   return (
-    <div
-      ref={wrapRef}
-      aria-hidden="true"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: 0,
-        height: 0,
-        zIndex: 20,
-        pointerEvents: 'none',
-        willChange: 'transform, width, height, opacity',
-        transition: 'opacity .35s ease',
-      }}
-    >
+    <LazyMotion features={domAnimation}>
       <div
-        ref={innerRef}
+        ref={wrapRef}
+        aria-hidden="true"
         style={{
-          width: '100%',
-          height: '100%',
+          position: 'fixed',
+          top: 0, left: 0,
+          width: 0, height: 0,
+          zIndex: 20,
+          pointerEvents: 'none',
           opacity: 0,
-          transform: 'scale(.92)',
-          transition: 'transform 0.6s cubic-bezier(.16,.84,.44,1)',
+          transformOrigin: 'top left',
+          transition: 'opacity 0.4s ease',
+          willChange: 'transform, opacity',
         }}
       >
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            animation: 'heroFloat 8s 2s ease-in-out infinite',
-            filter: 'drop-shadow(0 40px 60px rgba(60,40,20,.3)) drop-shadow(0 15px 25px rgba(60,40,20,.18))',
-            transition: 'filter 0.4s ease',
-          }}
+        <m.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 0.84, 0.44, 1] }}
+          style={{ width: '100%', height: '100%' }}
         >
-          <Image
-            src="/product-reel.png"
-            alt="Extngo 50ft retractable CAT6 cable reel"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </div>
+          <div
+            style={{
+              width: '100%', height: '100%',
+              animation: 'heroFloat 8s 2s ease-in-out infinite',
+              filter: 'drop-shadow(0 40px 60px rgba(60,40,20,.3)) drop-shadow(0 15px 25px rgba(60,40,20,.18))',
+              willChange: 'transform',
+            }}
+          >
+            <Image
+              src="/product-reel.png"
+              alt="Extngo 50ft retractable CAT6 cable reel"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </div>
+        </m.div>
       </div>
-    </div>
+    </LazyMotion>
   )
 }
