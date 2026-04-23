@@ -384,7 +384,7 @@ function TestimonialCard({
             color: 'rgba(255,255,255,0.06)',
             pointerEvents: 'none',
             userSelect: 'none',
-          }}>"</div>
+          }}>&ldquo;</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
             <Avatar name={t.name} size={44} />
             <div>
