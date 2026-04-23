@@ -116,20 +116,38 @@ export default function WhoItsFor() {
   const sectionRef = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
   const [active, setActive] = useState(0)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const startTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setActive(a => (a + 1) % CARDS.length)
+    }, 3000)
+  }
 
   useEffect(() => {
     const el = sectionRef.current
     if (!el) return
     const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setVisible(true) },
+      ([e]) => {
+        if (e.isIntersecting) {
+          setVisible(true)
+          startTimer()
+        } else {
+          if (timerRef.current) clearInterval(timerRef.current)
+        }
+      },
       { threshold: 0.15 }
     )
     obs.observe(el)
-    return () => obs.disconnect()
+    return () => {
+      obs.disconnect()
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
   }, [])
 
-  const prev = () => setActive(a => Math.max(0, a - 1))
-  const next = () => setActive(a => Math.min(CARDS.length - 1, a + 1))
+  const prev = () => { setActive(a => Math.max(0, a - 1)); startTimer() }
+  const next = () => { setActive(a => Math.min(CARDS.length - 1, a + 1)); startTimer() }
 
   // Window of visible cards — no remounting, just CSS transitions
   const windowStart = Math.min(
@@ -438,7 +456,7 @@ export default function WhoItsFor() {
                         background: card.bg,
                         pointerEvents: inWindow ? 'auto' : 'none',
                       }}
-                      onClick={() => inWindow && setActive(i)}
+                      onClick={() => { if (inWindow) { setActive(i); startTimer() } }}
                       role="button"
                       tabIndex={inWindow ? 0 : -1}
                       aria-label={card.title}
