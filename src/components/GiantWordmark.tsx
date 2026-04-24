@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { m, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 interface GiantWordmarkProps {
@@ -19,19 +19,30 @@ export default function GiantWordmark({ shown = true, tone = 'light' }: GiantWor
   const springX = useSpring(mouseX, { stiffness: 60, damping: 18, restDelta: 0.001 })
   const springY = useSpring(mouseY, { stiffness: 60, damping: 18, restDelta: 0.001 })
 
-  // Map normalised mouse pos (-0.5 → 0.5) to pixel offset
-  const tx = useTransform(springX, [-0.5, 0.5], [-28, 28])
-  const ty = useTransform(springY, [-0.5, 0.5], [-16, 16])
+  // Map normalised mouse pos (-0.5 → 0.5) to pixel offset — scale down on mobile
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  const parallaxRange = isMobile ? 12 : 28
+  const tx = useTransform(springX, [-0.5, 0.5], [-parallaxRange, parallaxRange])
+  const ty = useTransform(springY, [-0.5, 0.5], [-parallaxRange * 0.57, parallaxRange * 0.57])
 
   // ── Scroll scale — MotionValue, zero React re-renders ─────────────────────
   const scrollProgress = useMotionValue(0)
   const scale = useTransform(scrollProgress, [0, 1], [0.75, 1.5])
   const smoothScale = useSpring(scale, { stiffness: 80, damping: 22, restDelta: 0.001 })
-
   useEffect(() => {
     const container = containerRef.current?.offsetParent as HTMLElement | null
       || containerRef.current?.parentElement as HTMLElement | null
     if (!container) return
+
+    // Skip mouse parallax if user prefers reduced motion
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) return
 
     const onMove = (e: MouseEvent) => {
       const r = container.getBoundingClientRect()

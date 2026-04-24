@@ -68,9 +68,9 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
           zIndex: 4,
           display: 'flex',
           alignItems: 'center',
-          padding: '0 clamp(28px, 6vw, 96px)',
-          paddingTop: 80,   /* clear the fixed nav */
-          paddingBottom: 48,
+          padding: '0 clamp(20px, 6vw, 96px)',
+          paddingTop: 'clamp(70px,10vh,96px)',
+          paddingBottom: 'clamp(28px,5vh,48px)',
         }}>
             <div style={{ maxWidth: 640, width: '100%' }}>
 
@@ -96,7 +96,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
               {/* Headline */}
               <h1
                 className="font-display"
-                style={{ margin: 0, fontSize: 'clamp(48px, 5.5vw, 76px)', lineHeight: 1.0, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.03em' }}
+                style={{ margin: 0, fontSize: 'clamp(36px, 5.5vw, 76px)', lineHeight: 1.05, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.03em' }}
               >
                 <div style={{ overflow: 'hidden' }}><Word delay={0.45}>Never</Word></div>
                 <div style={{ overflow: 'hidden' }}><Word delay={0.6}>lose&nbsp;your</Word></div>
@@ -127,13 +127,13 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
               <m.div
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 1.4, ease: [0,0,0.2,1] }}
-                style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 36 }}
+                style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(10px,2vw,14px)', marginTop: 'clamp(24px,4vh,36px)' }}
               >
                 <m.button
                   className="btn btn-primary"
                   style={{
                     background: 'var(--accent)', color: '#FFFFFF', border: 'none',
-                    padding: '16px 28px', fontSize: 16, fontWeight: 600,
+                    padding: 'clamp(12px,2vh,16px) clamp(18px,3vw,28px)', fontSize: 'clamp(14px,1.5vw,16px)', fontWeight: 600,
                     boxShadow: '0 10px 30px rgba(232,67,26,.4), 0 0 0 1px rgba(232,67,26,.3)',
                     display: 'inline-flex', alignItems: 'center', gap: 10,
                   }}
@@ -154,7 +154,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                   style={{
                     background: 'rgba(255,255,255,.1)', color: '#FFFFFF',
                     border: '1.5px solid rgba(255,255,255,.25)',
-                    padding: '15px 26px', fontSize: 16, fontWeight: 600,
+                    padding: 'clamp(11px,2vh,15px) clamp(16px,3vw,26px)', fontSize: 'clamp(14px,1.5vw,16px)', fontWeight: 600,
                     backdropFilter: 'blur(10px)',
                     display: 'inline-flex', alignItems: 'center', gap: 10,
                   }}
@@ -173,7 +173,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
               <m.div
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 1.65, ease: [0,0,0.2,1] }}
-                style={{ display: 'flex', flexWrap: 'wrap', gap: 28, marginTop: 32, color: 'rgba(255,255,255,0.6)', fontSize: 13 }}
+                style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(12px,4vw,28px)', marginTop: 'clamp(20px,4vh,32px)', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ display: 'inline-flex', gap: 2 }}>

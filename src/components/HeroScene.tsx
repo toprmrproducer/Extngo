@@ -11,11 +11,13 @@ interface HeroSceneProps {
 
 export default function HeroScene({ style = {}, kenBurns = true }: HeroSceneProps) {
   // Scroll-driven parallax — image moves up slower than scroll (depth effect)
+  // Range is halved on mobile to avoid excessive movement
   const scrollY = useMotionValue(0)
-  const rawY = useTransform(scrollY, [0, 600], [0, 80])
+  const rawY = useTransform(scrollY, [0, 600], [0, typeof window !== 'undefined' && window.innerWidth < 768 ? 40 : 80])
   const y = useSpring(rawY, { stiffness: 80, damping: 20, restDelta: 0.001 })
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const update = () => scrollY.set(window.scrollY)
     window.addEventListener('scroll', update, { passive: true })
     return () => window.removeEventListener('scroll', update)

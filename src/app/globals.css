@@ -264,6 +264,12 @@ body {
   .wif-grid-responsive {
     grid-template-columns: 1fr !important;
   }
+  .wif-buttons-desktop {
+    display: none !important;
+  }
+  .wif-buttons-mobile {
+    display: flex !important;
+  }
 }
 
 /* Testimonials — 2 cols on tablet, 1 on mobile */
@@ -271,6 +277,7 @@ body {
   .tm-grid-responsive {
     grid-template-columns: 1fr 1fr !important;
   }
+  /* Hide right col on tablet — show left + center */
   .tm-col-hide {
     display: none !important;
   }
@@ -279,15 +286,25 @@ body {
   .tm-grid-responsive {
     grid-template-columns: 1fr !important;
   }
+  /* Hide left col on mobile — show only center (video) col */
+  .tm-col-left {
+    display: none !important;
+  }
   .tm-col-hide-sm {
     display: none !important;
   }
 }
 
-/* WhoItsFor stats — 2 cols on mobile */
+/* WhoItsFor stats — 2 cols on mobile, 1 col on very small screens */
 @media (max-width: 640px) {
   .wif-stats-responsive {
     grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 400px) {
+  .wif-stats-responsive {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0 !important;
   }
 }
 
@@ -298,6 +315,16 @@ body {
   }
 }
 
+@media (max-width: 480px) {
+  nav {
+    padding: 14px 16px !important;
+  }
+  /* Cap mobile menu link font size on very small screens */
+  .mobile-menu-link {
+    font-size: clamp(16px, 5vw, 20px) !important;
+  }
+}
+
 /* CTA — stack on mobile */
 @media (max-width: 860px) {
   .cta-grid-responsive {
@@ -305,6 +332,8 @@ body {
     text-align: center;
   }
   .cta-grid-responsive .inline-flex { margin-left: auto; margin-right: auto; }
+  .cta-grid-responsive p { margin-left: auto; margin-right: auto; }
+  .cta-btn-row { justify-content: center; }
   .cta-image-responsive { max-width: 320px !important; }
   .cta-stats-responsive { justify-content: center; }
 }
@@ -325,8 +354,61 @@ body {
   .footer-grid-responsive {
     grid-template-columns: 1fr !important;
   }
+  .footer-brand-col {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .footer-brand-col > div:first-child {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .footer-brand-col p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .footer-brand-col > div:last-child {
+    justify-content: center;
+  }
+  .footer-link-col {
+    text-align: center;
+    align-items: center;
+  }
+  .footer-link-col ul {
+    align-items: center;
+  }
   .footer-bottom-responsive {
     justify-content: center !important;
     text-align: center;
+    flex-direction: column;
+    gap: 12px !important;
+  }
+}
+
+/* Testimonials — tighter card gap on 2-col layout */
+@media (max-width: 640px) {
+  .tm-grid-responsive {
+    gap: 10px !important;
+  }
+}
+
+/* CTA — clip orbit ring on mobile to prevent horizontal overflow */
+@media (max-width: 480px) {
+  .cta-orbit-ring {
+    display: none;
+  }
+  /* Aggressive clamp minimums for very small screens */
+  .cta-grid-responsive {
+    padding: 0 !important;
+  }
+}
+
+/* ProductDifferences — specs use JS-driven scale, no CSS override needed */
+
+/* WhoItsFor stats — move to 2 cols at 860px */
+@media (max-width: 860px) {
+  .wif-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }

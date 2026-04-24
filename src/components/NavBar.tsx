@@ -42,7 +42,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '22px 40px',
+          padding: 'clamp(14px,2.5vh,22px) clamp(20px,5vw,40px)',
           position: 'fixed',
           top: 0, left: 0, right: 0,
           zIndex: 100,
@@ -52,7 +52,6 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
           borderBottom: `1px solid ${navBorder}`,
           transition: 'background 0.35s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.35s cubic-bezier(0.25,0.46,0.45,0.94)',
         }}
-        className="md:px-10 px-6"
       >
         {/* Logo */}
         <m.div
@@ -68,6 +67,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
             width={110}
             height={36}
             style={{ objectFit: 'contain', transition: 'filter 0.35s ease' }}
+            sizes="(max-width: 480px) 90px, 110px"
             priority
           />
         </m.div>
@@ -167,7 +167,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
               background: menuBg,
               backdropFilter: 'blur(24px) saturate(180%)',
               WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-              padding: '88px 32px 32px',
+              padding: 'clamp(70px,10vh,88px) clamp(20px,5vw,32px) 32px',
               display: 'flex',
               flexDirection: 'column',
               gap: 4,
@@ -183,6 +183,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
+                className="mobile-menu-link"
                 style={{
                   padding: '14px 0',
                   fontSize: 20,

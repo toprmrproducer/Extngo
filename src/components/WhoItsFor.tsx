@@ -50,8 +50,23 @@ const STATS = [
 ]
 
 const CARD_HEIGHT = 520
-const VISIBLE_COUNT = 3
 const CARD_GAP = 16
+
+function useVisibleCount() {
+  const [count, setCount] = useState(3)
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth
+      if (w < 640) setCount(1)
+      else if (w < 960) setCount(2)
+      else setCount(3)
+    }
+    update()
+    window.addEventListener('resize', update, { passive: true })
+    return () => window.removeEventListener('resize', update)
+  }, [])
+  return count
+}
 
 // ── Arrow button ─────────────────────────────────────────────────────────────
 function ArrowButton({ disabled, onClick, d, label }: { disabled: boolean; onClick: () => void; d: string; label: string }) {
@@ -88,6 +103,7 @@ export default function WhoItsFor() {
   const [active, setActive] = useState(0)
   const [hovered, setHovered] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const visibleCount = useVisibleCount()
 
   // Drag state for swipe gesture
   const dragStartX = useRef(0)
@@ -118,8 +134,8 @@ export default function WhoItsFor() {
   const prev = () => { setActive(a => Math.max(0, a - 1)); startTimer() }
   const next = () => { setActive(a => Math.min(CARDS.length - 1, a + 1)); startTimer() }
 
-  const windowStart = Math.min(Math.max(0, active - Math.floor(VISIBLE_COUNT / 2)), CARDS.length - VISIBLE_COUNT)
-  const windowEnd = windowStart + VISIBLE_COUNT - 1
+  const windowStart = Math.min(Math.max(0, active - Math.floor(visibleCount / 2)), CARDS.length - visibleCount)
+  const windowEnd = windowStart + visibleCount - 1
 
   return (
     <LazyMotion features={domAnimation}>
@@ -137,6 +153,7 @@ export default function WhoItsFor() {
       >
         {/* Main grid — left copy | right carousel */}
         <div
+          className="wif-grid-responsive"
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1.4fr',
@@ -191,6 +208,7 @@ export default function WhoItsFor() {
             <m.div
               initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.4, ease: [0,0,0.2,1] }}
+              className="wif-buttons-desktop"
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
               <m.button
@@ -222,7 +240,7 @@ export default function WhoItsFor() {
           >
             {/* Card track */}
             <div
-              style={{ overflow: 'hidden', position: 'relative', width: '100%', height: CARD_HEIGHT }}
+              style={{ overflow: 'hidden', position: 'relative', width: '100%', height: 'clamp(340px,58vh,520px)' }}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
               onTouchStart={e => { dragStartX.current = e.touches[0].clientX }}
@@ -247,6 +265,7 @@ export default function WhoItsFor() {
                       animate={{
                         flex: !inWindow ? 0 : isActive ? 3 : 1,
                         opacity: inWindow ? 1 : 0,
+                        fontSize: isActive ? 'clamp(20px,3vw,36px)' : 'clamp(13px,2vw,20px)',
                       }}
                       transition={spring.gentle}
                       style={{
@@ -306,7 +325,7 @@ export default function WhoItsFor() {
                         {card.badge}
                       </div>
                       <m.div
-                        animate={{ fontSize: isActive ? 36 : 20 }}
+                        animate={{ fontSize: isActive ? 'clamp(20px,3vw,36px)' : 'clamp(13px,2vw,20px)' }}
                         transition={spring.gentle}
                         style={{
                           position: 'absolute', top: 12, right: 14, zIndex: 2,
@@ -356,11 +375,40 @@ export default function WhoItsFor() {
                 ))}
               </div>
             </div>
+
+            {/* Buttons — mobile only, shown below carousel */}
+            <m.div
+              initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.5, ease: [0,0,0.2,1] }}
+              className="wif-buttons-mobile"
+              style={{ display: 'none', gap: 12, flexWrap: 'wrap', marginTop: 20 }}
+            >
+              <m.button
+                className="btn btn-primary"
+                style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center' }}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                Shop Now
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                </svg>
+              </m.button>
+              <m.button
+                className="btn btn-ghost"
+                style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center' }}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                See All Use Cases
+              </m.button>
+            </m.div>
           </m.div>
         </div>
 
         {/* Stats strip */}
         <div
+          className="wif-stats-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -378,7 +426,7 @@ export default function WhoItsFor() {
             >
               <span style={{
                 fontFamily: 'var(--font-bricolage)',
-                fontSize: 34, color: '#111', lineHeight: 1,
+                fontSize: 'clamp(24px,4vw,34px)', color: '#111', lineHeight: 1,
                 display: 'block', fontWeight: 800,
               }}>
                 {s.number}

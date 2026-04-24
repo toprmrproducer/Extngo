@@ -1,17 +1,18 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, fadeIn, staggerContainer } from '@/lib/motion'
 
 function FloatingSpec({
-  label, value, angle, distance, delay, accent,
+  label, value, angle, distance, delay, accent, scale = 1,
 }: {
-  label: string; value: string; angle: number; distance: number; delay: number; accent: string
+  label: string; value: string; angle: number; distance: number; delay: number; accent: string; scale?: number
 }) {
-  const x = Math.cos((angle * Math.PI) / 180) * distance
-  const y = Math.sin((angle * Math.PI) / 180) * distance
+  const d = distance * scale
+  const x = Math.cos((angle * Math.PI) / 180) * d
+  const y = Math.sin((angle * Math.PI) / 180) * d
 
   return (
     <m.div
@@ -27,7 +28,7 @@ function FloatingSpec({
     >
       <div
         style={{
-          padding: '8px 14px',
+          padding: scale < 0.7 ? '5px 9px' : '8px 14px',
           borderRadius: 14,
           background: 'rgba(255,255,255,0.78)',
           border: '1px solid rgba(26,26,26,0.08)',
@@ -38,14 +39,14 @@ function FloatingSpec({
           whiteSpace: 'nowrap',
           display: 'flex',
           alignItems: 'center',
-          gap: 10,
+          gap: scale < 0.7 ? 6 : 10,
           willChange: 'transform',
         }}
       >
-        <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, flexShrink: 0 }} />
+        <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, flexShrink: 0 }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <div style={{ fontSize: 9, letterSpacing: '1.6px', textTransform: 'uppercase', color: '#8A8A8A', fontWeight: 700, lineHeight: 1 }}>{label}</div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#1A1A1A', letterSpacing: '0.2px', lineHeight: 1.1 }}>{value}</div>
+          <div style={{ fontSize: scale < 0.7 ? 7.5 : 9, letterSpacing: '1.6px', textTransform: 'uppercase', color: '#8A8A8A', fontWeight: 700, lineHeight: 1 }}>{label}</div>
+          <div style={{ fontSize: scale < 0.7 ? 10.5 : 13, fontWeight: 700, color: '#1A1A1A', letterSpacing: '0.2px', lineHeight: 1.1 }}>{value}</div>
         </div>
       </div>
     </m.div>
@@ -71,6 +72,21 @@ const ORANGE_SPECS = [
 export default function ProductDifferences() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-15% 0px' })
+
+  // Scale down spec distances on smaller viewports
+  const [specScale, setSpecScale] = useState(1)
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth
+      if (w < 400) setSpecScale(0.55)
+      else if (w < 540) setSpecScale(0.65)
+      else if (w < 768) setSpecScale(0.78)
+      else setSpecScale(1)
+    }
+    update()
+    window.addEventListener('resize', update, { passive: true })
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   return (
     <LazyMotion features={domAnimation}>
@@ -126,6 +142,7 @@ export default function ProductDifferences() {
             gap: 'clamp(48px,8vw,120px)',
             width: '100%',
             maxWidth: 1400,
+            overflow: 'visible',
           }}
         >
           {/* Green */}
@@ -151,7 +168,7 @@ export default function ProductDifferences() {
               EXTNGO Green
             </div>
 
-            <div style={{ position: 'relative', width: '100%', maxWidth: 380, aspectRatio: '1/1' }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: 380, aspectRatio: '1/1', overflow: 'visible' }}>
               <div
                 style={{
                   position: 'relative', width: '100%', height: '100%',
@@ -167,10 +184,11 @@ export default function ProductDifferences() {
                 variants={staggerContainer(0.1, 0.3)}
                 initial="hidden"
                 animate={inView ? 'visible' : 'hidden'}
+                className="product-floating-specs"
                 style={{ position: 'absolute', inset: 0 }}
               >
                 {GREEN_SPECS.map((s, i) => (
-                  <FloatingSpec key={i} {...s} delay={0.3 + i * 0.1} accent="#4CAF50" />
+                  <FloatingSpec key={i} {...s} delay={0.3 + i * 0.1} accent="#4CAF50" scale={specScale} />
                 ))}
               </m.div>
             </div>
@@ -199,7 +217,7 @@ export default function ProductDifferences() {
               EXTNGO Orange
             </div>
 
-            <div style={{ position: 'relative', width: '100%', maxWidth: 380, aspectRatio: '1/1' }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: 380, aspectRatio: '1/1', overflow: 'visible' }}>
               {/* Anchor for PinnedProduct */}
               <div
                 data-product-anchor="orange"
@@ -210,10 +228,11 @@ export default function ProductDifferences() {
                 variants={staggerContainer(0.1, 0.3)}
                 initial="hidden"
                 animate={inView ? 'visible' : 'hidden'}
+                className="product-floating-specs"
                 style={{ position: 'absolute', inset: 0 }}
               >
                 {ORANGE_SPECS.map((s, i) => (
-                  <FloatingSpec key={i} {...s} delay={0.3 + i * 0.1} accent="var(--accent)" />
+                  <FloatingSpec key={i} {...s} delay={0.3 + i * 0.1} accent="var(--accent)" scale={specScale} />
                 ))}
               </m.div>
             </div>

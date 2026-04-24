@@ -80,7 +80,7 @@ export default function ProductDetail() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            minHeight: 'clamp(360px,60vh,620px)',
+            minHeight: 'clamp(260px,45vh,620px)',
           }}
         >
           {/* Radial glow */}
@@ -205,8 +205,8 @@ export default function ProductDetail() {
           >
             <div>
               <div style={{ fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase', color: '#8A8A8A', fontWeight: 600, marginBottom: 4 }}>Price</div>
-              <div style={{ fontSize: 36, fontWeight: 700, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1 }}>
-                $79.<span style={{ fontSize: 22 }}>99</span>
+              <div style={{ fontSize: 'clamp(26px,4vw,36px)', fontWeight: 700, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                $79.<span style={{ fontSize: 'clamp(16px,2.5vw,22px)' }}>99</span>
               </div>
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>

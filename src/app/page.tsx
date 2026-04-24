@@ -38,7 +38,7 @@ export default function Home() {
               position: 'fixed',
               top: 0, left: 0, right: 0,
               width: '100%',
-              height: '100vh',
+              height: '100dvh',
               overflow: 'hidden',
               zIndex: 1,
             }}
@@ -49,7 +49,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Spacer */}
-      <div style={{ height: '100vh', position: 'relative', zIndex: 2, pointerEvents: 'none' }} />
+      <div style={{ height: '100dvh', position: 'relative', zIndex: 2, pointerEvents: 'none' }} />
 
       {/* Content stack */}
       <div style={{ position: 'relative', zIndex: 3, background: '#FFFFFF' }}>

@@ -130,6 +130,7 @@ export default function Cta() {
 
             <m.div
               variants={fadeUp}
+              className="cta-btn-row"
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
               <m.button
@@ -237,13 +238,14 @@ export default function Cta() {
                 alt="Extngo retractable cable reel"
                 fill
                 style={{ objectFit: 'contain' }}
-                sizes="(max-width: 860px) 80vw, 40vw"
+                sizes="(max-width: 480px) 90vw, (max-width: 860px) 80vw, 40vw"
               />
             </div>
 
-            {/* Orbit ring */}
+            {/* Orbit ring — clipped on mobile to prevent overflow */}
             <div
               aria-hidden
+              className="cta-orbit-ring"
               style={{
                 position: 'absolute',
                 top: '50%',

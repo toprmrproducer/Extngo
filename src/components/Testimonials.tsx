@@ -362,7 +362,7 @@ export default function Testimonials() {
           className="tm-viewport"
           style={{
             position: 'relative',
-            height: 'clamp(420px,56vh,560px)',
+            height: 'clamp(340px,52vh,560px)',
             maxWidth: 1200,
             width: '100%',
             margin: '0 auto',
@@ -374,15 +374,15 @@ export default function Testimonials() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 18,
+              gap: 'clamp(10px,1.5vw,18px)',
               height: '100%',
               alignItems: 'start',
             }}
           >
-            <div className="tm-col" style={{ overflow: 'hidden', height: '100%' }}>
+            <div className="tm-col tm-col-left" style={{ overflow: 'hidden', height: '100%' }}>
               <ScrollColumn items={COLUMN_LEFT} direction="down" />
             </div>
-            <div className="tm-col" style={{ overflow: 'hidden', height: '100%' }}>
+            <div className="tm-col tm-col-center" style={{ overflow: 'hidden', height: '100%' }}>
               <ScrollColumn items={COLUMN_CENTER} direction="up" />
             </div>
             <div className="tm-col tm-col-hide" style={{ overflow: 'hidden', height: '100%' }}>

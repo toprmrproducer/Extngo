@@ -104,7 +104,7 @@ export default function Footer() {
             }}
           >
             {/* Brand column */}
-            <m.div variants={fadeUp}>
+            <m.div variants={fadeUp} className="footer-brand-col">
               <div style={{ marginBottom: 18 }}>
                 <Image
                   src="/logo.png"
@@ -112,6 +112,7 @@ export default function Footer() {
                   width={120}
                   height={38}
                   style={{ objectFit: 'contain' }}
+                  sizes="(max-width: 480px) 100px, 120px"
                 />
               </div>
               <p style={{
@@ -154,7 +155,7 @@ export default function Footer() {
 
             {/* Link columns */}
             {COLUMNS.map(col => (
-              <m.div key={col.title} variants={fadeUp}>
+              <m.div key={col.title} variants={fadeUp} className="footer-link-col">
                 <h4
                   style={{
                     fontSize: 11,
@@ -173,7 +174,7 @@ export default function Footer() {
                       <a
                         href="#"
                         style={{
-                          fontSize: 14,
+                          fontSize: 'clamp(12px,3.5vw,14px)',
                           color: '#AAAAAA',
                           textDecoration: 'none',
                           transition: 'color 0.2s',
@@ -200,7 +201,7 @@ export default function Footer() {
             aria-hidden
             style={{
               fontFamily: 'var(--font-bricolage)',
-              fontSize: 'clamp(80px,16vw,220px)',
+              fontSize: 'clamp(64px,16vw,220px)',
               fontWeight: 800,
               letterSpacing: '-0.05em',
               lineHeight: 0.9,
