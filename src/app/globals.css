@@ -221,6 +221,34 @@ body {
   to   { transform: rotate(360deg); }
 }
 
+/* ── Testimonials infinite scroll ──────────────────────────────────────────── */
+/* Cards are rendered twice; translating to -50% lands on the start of the second copy, which looks identical to 0% — so the loop is seamless. */
+@keyframes tm-scroll-up {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+@keyframes tm-scroll-down {
+  0%   { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+
+.tm-track {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  will-change: transform;
+}
+.tm-track-down { animation: tm-scroll-down 44s linear infinite; }
+.tm-track-up   { animation: tm-scroll-up   52s linear infinite; }
+.tm-track-down-slow { animation: tm-scroll-down 64s linear infinite; }
+
+/* Pause only the column the user is hovering */
+.tm-col:hover .tm-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-track-down, .tm-track-up, .tm-track-down-slow { animation: none; }
+}
+
 /* ── Responsive grid overrides ─────────────────────────────────────────────── */
 
 /* ProductDetail — stack on mobile */
@@ -267,5 +295,38 @@ body {
 @media (max-width: 768px) {
   nav {
     padding: 18px 24px !important;
+  }
+}
+
+/* CTA — stack on mobile */
+@media (max-width: 860px) {
+  .cta-grid-responsive {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+  .cta-grid-responsive .inline-flex { margin-left: auto; margin-right: auto; }
+  .cta-image-responsive { max-width: 320px !important; }
+  .cta-stats-responsive { justify-content: center; }
+}
+
+/* Footer — 2 cols on tablet, 1 on mobile */
+@media (max-width: 1024px) {
+  .footer-grid-responsive {
+    grid-template-columns: 1.4fr 1fr 1fr !important;
+    gap: 40px !important;
+  }
+}
+@media (max-width: 720px) {
+  .footer-grid-responsive {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (max-width: 480px) {
+  .footer-grid-responsive {
+    grid-template-columns: 1fr !important;
+  }
+  .footer-bottom-responsive {
+    justify-content: center !important;
+    text-align: center;
   }
 }

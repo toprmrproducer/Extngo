@@ -8,6 +8,8 @@ import ProductDetail from '@/components/ProductDetail'
 import ProductDifferences from '@/components/ProductDifferences'
 import WhoItsFor from '@/components/WhoItsFor'
 import Testimonials from '@/components/Testimonials'
+import Cta from '@/components/Cta'
+import Footer from '@/components/Footer'
 import NavBar from '@/components/NavBar'
 
 export default function Home() {
@@ -56,6 +58,8 @@ export default function Home() {
         <PinnedProduct />
         <WhoItsFor />
         <Testimonials />
+        <Cta />
+        <Footer />
       </div>
     </LazyMotion>
   )
