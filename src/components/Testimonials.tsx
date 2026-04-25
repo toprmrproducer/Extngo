@@ -67,10 +67,11 @@ type VideoItem = {
 type Item = TextItem | VideoItem
 
 const COLUMN_LEFT: Item[] = [
-  { kind: 'text', name: 'James Harlow',       role: 'IT Director, NovaTech',        quote: 'Ran 50ft through our server room without a single snag. Buttery smooth retract — nothing else comes close.', rating: 5 },
-  { kind: 'text', name: 'Isabella Lester',    role: 'Home Office Setup',            quote: 'Clean desk, clean mind. Extngo made my WFH setup look professional.', rating: 5 },
-  { kind: 'text', name: 'Elizabeth Hallward', role: 'Office Manager',               quote: 'Ordered three for our open-plan office. Cables are finally invisible. Worth every penny.', rating: 5 },
-  { kind: 'text', name: 'Henry Vane',         role: 'Co-Founder, Loremipsum Co.',   quote: "Best CAT6 I've used. The retract is satisfying every single time.", rating: 4 },
+  { kind: 'text',  name: 'James Harlow',       role: 'IT Director, NovaTech',        quote: 'Ran 50ft through our server room without a single snag. Buttery smooth retract — nothing else comes close.', rating: 5 },
+  { kind: 'video', name: 'Customer Review',    role: 'Verified Purchase',            src: '/review.mp4' },
+  { kind: 'text',  name: 'Isabella Lester',    role: 'Home Office Setup',            quote: 'Clean desk, clean mind. Extngo made my WFH setup look professional.', rating: 5 },
+  { kind: 'text',  name: 'Elizabeth Hallward', role: 'Office Manager',               quote: 'Ordered three for our open-plan office. Cables are finally invisible. Worth every penny.', rating: 5 },
+  { kind: 'text',  name: 'Henry Vane',         role: 'Co-Founder, Loremipsum Co.',   quote: "Best CAT6 I've used. The retract is satisfying every single time.", rating: 4 },
 ]
 
 const COLUMN_CENTER: Item[] = [
@@ -81,10 +82,11 @@ const COLUMN_CENTER: Item[] = [
 ]
 
 const COLUMN_RIGHT: Item[] = [
-  { kind: 'text', name: 'Linda Shaw',     role: 'Event Producer',     quote: 'Set up and struck in under 10 minutes at a trade show. Game changer for live events.', rating: 5 },
-  { kind: 'text', name: 'Basil Hallward', role: 'Co-Founder, Example.com', quote: 'Build quality is exceptional. Feels like it was designed by someone who actually runs cable for a living.', rating: 5 },
-  { kind: 'text', name: 'Sofia Nakamura', role: 'Hotel Operations',   quote: 'We swapped gaffer tape for Extngo on every ballroom. Guests stopped tripping. Maintenance got their weekends back.', rating: 5 },
-  { kind: 'text', name: 'Richard Ames',   role: 'Contractor',         quote: 'Rugged enough for my toolbox, clean enough for the client walkthrough. Rare combo.', rating: 5 },
+  { kind: 'text',  name: 'Linda Shaw',     role: 'Event Producer',          quote: 'Set up and struck in under 10 minutes at a trade show. Game changer for live events.', rating: 5 },
+  { kind: 'video', name: 'Customer Review', role: 'Verified Purchase',       src: '/review1.mp4' },
+  { kind: 'text',  name: 'Basil Hallward', role: 'Co-Founder, Example.com', quote: 'Build quality is exceptional. Feels like it was designed by someone who actually runs cable for a living.', rating: 5 },
+  { kind: 'text',  name: 'Sofia Nakamura', role: 'Hotel Operations',        quote: 'We swapped gaffer tape for Extngo on every ballroom. Guests stopped tripping. Maintenance got their weekends back.', rating: 5 },
+  { kind: 'text',  name: 'Richard Ames',   role: 'Contractor',              quote: 'Rugged enough for my toolbox, clean enough for the client walkthrough. Rare combo.', rating: 5 },
 ]
 
 // ── Text card ────────────────────────────────────────────────────────────────
@@ -288,6 +290,7 @@ export default function Testimonials() {
     <LazyMotion features={domAnimation}>
       <section
         ref={sectionRef}
+        id="reviews"
         style={{
           background: '#F5F3EF',
           padding: 'clamp(48px,6vh,80px) clamp(28px,6vw,96px)',

@@ -2,8 +2,48 @@
 
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, fadeIn, staggerContainer } from '@/lib/motion'
+
+function AmazonButton({ href, bg, bgHover, border, borderHover, color }: {
+  href: string; bg: string; bgHover: string; border: string; borderHover: string; color: string
+}) {
+  return (
+    <a
+      href={href}
+      target={href !== '#' ? '_blank' : undefined}
+      rel={href !== '#' ? 'noopener noreferrer' : undefined}
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: 7,
+        marginTop: 72,
+        padding: '10px 20px', borderRadius: 999,
+        background: bg, border: `1px solid ${border}`,
+        color, fontSize: 13, fontWeight: 600,
+        textDecoration: 'none', letterSpacing: '0.3px',
+        transition: 'background 0.2s, border-color 0.2s',
+      }}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLAnchorElement
+        el.style.background = bgHover
+        el.style.borderColor = borderHover
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget as HTMLAnchorElement
+        el.style.background = bg
+        el.style.borderColor = border
+      }}
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
+      </svg>
+      Buy on Amazon
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 17 17 7" /><path d="M7 7h10v10" />
+      </svg>
+    </a>
+  )
+}
 
 function FloatingSpec({
   label, value, angle, distance, delay, accent, scale = 1,
@@ -53,6 +93,14 @@ function FloatingSpec({
   )
 }
 
+const BLUE_SPECS = [
+  { label: 'Length', value: '15 Metres (49.2 ft)', angle: 90, distance: 220 },
+  { label: 'Interface', value: 'USB-C to RJ45', angle: -150, distance: 210 },
+  { label: 'Speed', value: '1 Gbps', angle: 160, distance: 205 },
+  { label: 'Design', value: 'Retractable Reel', angle: -35, distance: 195 },
+  { label: 'Drivers', value: 'Plug & Play', angle: 20, distance: 205 },
+]
+
 const GREEN_SPECS = [
   { label: 'Length', value: '33 Feet (10 Meter)', angle: 90, distance: 220 },
   { label: 'Dimensions (in)', value: '3 × 5.1 × 6.5', angle: -150, distance: 210 },
@@ -97,8 +145,8 @@ export default function ProductDifferences() {
           position: 'relative',
           background: '#FFFFFF',
           width: '100%',
-          minHeight: '100vh',
-          padding: 'clamp(80px,12vh,140px) clamp(28px,6vw,96px)',
+          minHeight: '140vh',
+          padding: 'clamp(80px,12vh,140px) clamp(28px,6vw,96px) clamp(120px,16vh,200px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -130,22 +178,23 @@ export default function ProductDifferences() {
             variants={fadeUp}
             style={{ margin: '16px auto 0', color: '#3A3A3A', fontSize: 17, lineHeight: 1.55, maxWidth: 560 }}
           >
-            Compare our two models and find the perfect fit for your needs
+            Compare our three models and find the perfect fit for your needs
           </m.p>
         </m.div>
 
-        {/* Comparison grid */}
+        {/* Top row: Blue + Orange */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
-            gap: 'clamp(48px,8vw,120px)',
+            gridTemplateColumns: 'repeat(2, minmax(0, 420px))',
+            justifyContent: 'center',
+            gap: 'clamp(48px,8vw,140px)',
             width: '100%',
             maxWidth: 1400,
             overflow: 'visible',
           }}
         >
-          {/* Green */}
+          {/* Blue */}
           <m.div
             variants={fadeUp}
             initial="hidden"
@@ -153,31 +202,33 @@ export default function ProductDifferences() {
             transition={{ delay: 0.1 }}
             style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           >
-            <div
+            <Link
+              href="/products/blue"
               className="inline-flex items-center gap-2 rounded-full mb-12"
               style={{
                 padding: '7px 13px',
-                background: 'rgba(76,175,80,0.12)',
-                border: '1px solid rgba(76,175,80,0.25)',
-                color: '#2E7D32',
+                background: 'rgba(33,150,243,0.10)',
+                border: '1px solid rgba(33,150,243,0.28)',
+                color: '#1565C0',
                 fontSize: 11, fontWeight: 600,
                 letterSpacing: '2px', textTransform: 'uppercase',
+                textDecoration: 'none',
               }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4CAF50' }} />
-              EXTNGO Green
-            </div>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2196F3' }} />
+              EXTNGO USB-C to Ethernet
+            </Link>
 
-            <div style={{ position: 'relative', width: '100%', maxWidth: 380, aspectRatio: '1/1', overflow: 'visible' }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: 420, aspectRatio: '1/1', overflow: 'visible' }}>
               <div
                 style={{
                   position: 'relative', width: '100%', height: '100%',
-                  animation: 'heroFloat 8s 1.4s ease-in-out infinite',
-                  filter: 'drop-shadow(0 40px 60px rgba(40,80,40,0.28)) drop-shadow(0 15px 25px rgba(40,80,40,0.18))',
+                  animation: 'heroFloat 8s 1.0s ease-in-out infinite',
+                  filter: 'drop-shadow(0 40px 60px rgba(20,60,120,0.28)) drop-shadow(0 15px 25px rgba(20,60,120,0.18))',
                   willChange: 'transform',
                 }}
               >
-                <Image src="/product-green.png" alt="Extngo Green 33ft retractable CAT6 cable reel" fill style={{ objectFit: 'contain' }} />
+                <Image src="/product-blue.png" alt="Extngo Blue 100ft retractable CAT6 cable reel" fill style={{ objectFit: 'contain' }} />
               </div>
 
               <m.div
@@ -187,11 +238,18 @@ export default function ProductDifferences() {
                 className="product-floating-specs"
                 style={{ position: 'absolute', inset: 0 }}
               >
-                {GREEN_SPECS.map((s, i) => (
-                  <FloatingSpec key={i} {...s} delay={0.3 + i * 0.1} accent="#4CAF50" scale={specScale} />
+                {BLUE_SPECS.map((s, i) => (
+                  <FloatingSpec key={i} {...s} delay={0.3 + i * 0.1} accent="#2196F3" scale={specScale} />
                 ))}
               </m.div>
             </div>
+
+            <AmazonButton
+              href="https://www.amazon.com/dp/B0GJD6W12Y"
+              bg="rgba(33,150,243,0.06)" bgHover="rgba(33,150,243,0.14)"
+              border="rgba(33,150,243,0.2)" borderHover="rgba(33,150,243,0.45)"
+              color="#1565C0"
+            />
           </m.div>
 
           {/* Orange */}
@@ -217,7 +275,7 @@ export default function ProductDifferences() {
               EXTNGO Orange
             </div>
 
-            <div style={{ position: 'relative', width: '100%', maxWidth: 380, aspectRatio: '1/1', overflow: 'visible' }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: 420, aspectRatio: '1/1', overflow: 'visible' }}>
               {/* Anchor for PinnedProduct */}
               <div
                 data-product-anchor="orange"
@@ -236,8 +294,71 @@ export default function ProductDifferences() {
                 ))}
               </m.div>
             </div>
+
+            <AmazonButton
+              href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
+              bg="rgba(232,67,26,0.06)" bgHover="rgba(232,67,26,0.14)"
+              border="rgba(232,67,26,0.2)" borderHover="rgba(232,67,26,0.45)"
+              color="var(--accent)"
+            />
           </m.div>
         </div>
+
+        {/* Bottom center: Green */}
+        <m.div
+          variants={fadeUp}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          transition={{ delay: 0.34 }}
+          style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 'clamp(48px,8vw,100px)', width: 'min(420px, 100%)' }}
+        >
+          <div
+            className="inline-flex items-center gap-2 rounded-full mb-12"
+            style={{
+              padding: '7px 13px',
+              background: 'rgba(76,175,80,0.12)',
+              border: '1px solid rgba(76,175,80,0.25)',
+              color: '#2E7D32',
+              fontSize: 11, fontWeight: 600,
+              letterSpacing: '2px', textTransform: 'uppercase',
+            }}
+          >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4CAF50' }} />
+            EXTNGO Green
+          </div>
+
+          <div style={{ position: 'relative', width: '100%', maxWidth: 420, aspectRatio: '1/1', overflow: 'visible' }}>
+            <div
+              style={{
+                position: 'relative', width: '100%', height: '100%',
+                animation: 'heroFloat 8s 1.4s ease-in-out infinite',
+                filter: 'drop-shadow(0 40px 60px rgba(40,80,40,0.28)) drop-shadow(0 15px 25px rgba(40,80,40,0.18))',
+                willChange: 'transform',
+              }}
+            >
+              <Image src="/product-green.png" alt="Extngo Green 33ft retractable CAT6 cable reel" fill style={{ objectFit: 'contain' }} />
+            </div>
+
+            <m.div
+              variants={staggerContainer(0.1, 0.3)}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+              className="product-floating-specs"
+              style={{ position: 'absolute', inset: 0 }}
+            >
+              {GREEN_SPECS.map((s, i) => (
+                <FloatingSpec key={i} {...s} delay={0.3 + i * 0.1} accent="#4CAF50" scale={specScale} />
+              ))}
+            </m.div>
+          </div>
+
+          <AmazonButton
+            href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LW2YNJ4?ref_=ast_sto_dp&th=1"
+            bg="rgba(76,175,80,0.06)" bgHover="rgba(76,175,80,0.14)"
+            border="rgba(76,175,80,0.2)" borderHover="rgba(76,175,80,0.45)"
+            color="#2E7D32"
+          />
+        </m.div>
       </section>
     </LazyMotion>
   )

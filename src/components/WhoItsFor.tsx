@@ -141,6 +141,7 @@ export default function WhoItsFor() {
     <LazyMotion features={domAnimation}>
       <section
         ref={sectionRef}
+        id="use-cases"
         style={{
           background: '#F5F3EF',
           padding: 'clamp(64px,8vh,100px) clamp(28px,6vw,96px)',
@@ -211,9 +212,12 @@ export default function WhoItsFor() {
               className="wif-buttons-desktop"
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
-              <m.button
+              <m.a
+                href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary"
-                style={{ fontSize: 14, padding: '13px 28px' }}
+                style={{ fontSize: 14, padding: '13px 28px', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -221,15 +225,16 @@ export default function WhoItsFor() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                 </svg>
-              </m.button>
-              <m.button
+              </m.a>
+              <m.a
+                href="#product-differences"
                 className="btn btn-ghost"
-                style={{ fontSize: 14, padding: '13px 28px' }}
+                style={{ fontSize: 14, padding: '13px 28px', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
               >
                 See All Use Cases
-              </m.button>
+              </m.a>
             </m.div>
           </div>
 
@@ -383,9 +388,12 @@ export default function WhoItsFor() {
               className="wif-buttons-mobile"
               style={{ display: 'none', gap: 12, flexWrap: 'wrap', marginTop: 20 }}
             >
-              <m.button
+              <m.a
+                href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary"
-                style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center' }}
+                style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -393,15 +401,16 @@ export default function WhoItsFor() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                 </svg>
-              </m.button>
-              <m.button
+              </m.a>
+              <m.a
+                href="#product-differences"
                 className="btn btn-ghost"
-                style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center' }}
+                style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
               >
                 See All Use Cases
-              </m.button>
+              </m.a>
             </m.div>
           </m.div>
         </div>

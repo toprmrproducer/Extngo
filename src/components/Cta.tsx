@@ -19,6 +19,7 @@ export default function Cta() {
     <LazyMotion features={domAnimation}>
       <section
         ref={ref}
+        id="contact"
         style={{
           position: 'relative',
           background: '#0F0F0F',
@@ -133,17 +134,20 @@ export default function Cta() {
               className="cta-btn-row"
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
-              <m.button
+              <m.a
+                href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                style={{ fontSize: 15, padding: '15px 30px' }}
+                style={{ fontSize: 15, padding: '15px 30px', textDecoration: 'none' }}
               >
                 Shop Extngo
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                 </svg>
-              </m.button>
+              </m.a>
               <m.button
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}

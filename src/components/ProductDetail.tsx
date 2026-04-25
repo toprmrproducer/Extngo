@@ -210,18 +210,22 @@ export default function ProductDetail() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <m.button
+              <m.a
+                href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   background: 'var(--accent)', color: '#fff', border: 0,
                   padding: '14px 22px', borderRadius: 999, fontWeight: 600,
                   fontSize: 14, letterSpacing: '.3px', cursor: 'pointer',
                   boxShadow: '0 10px 24px rgba(232,67,26,.28)',
+                  display: 'inline-flex', alignItems: 'center', textDecoration: 'none',
                 }}
                 whileHover={{ y: -2, boxShadow: '0 16px 32px rgba(232,67,26,.4)' }}
                 whileTap={{ scale: 0.97 }}
               >
-                Add to cart →
-              </m.button>
+                Buy on Amazon →
+              </m.a>
               <m.button
                 style={{
                   background: 'transparent', color: 'var(--ink)',

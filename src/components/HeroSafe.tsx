@@ -129,13 +129,17 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 transition={{ duration: 0.7, delay: 1.4, ease: [0,0,0.2,1] }}
                 style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(10px,2vw,14px)', marginTop: 'clamp(24px,4vh,36px)' }}
               >
-                <m.button
+                <m.a
+                  href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-primary"
                   style={{
                     background: 'var(--accent)', color: '#FFFFFF', border: 'none',
                     padding: 'clamp(12px,2vh,16px) clamp(18px,3vw,28px)', fontSize: 'clamp(14px,1.5vw,16px)', fontWeight: 600,
                     boxShadow: '0 10px 30px rgba(232,67,26,.4), 0 0 0 1px rgba(232,67,26,.3)',
                     display: 'inline-flex', alignItems: 'center', gap: 10,
+                    textDecoration: 'none',
                   }}
                   whileHover={{ y: -2, boxShadow: '0 16px 40px rgba(232,67,26,.55)' }}
                   whileTap={{ scale: 0.97 }}
@@ -147,7 +151,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                   </svg>
-                </m.button>
+                </m.a>
 
                 <m.button
                   className="btn btn-ghost"

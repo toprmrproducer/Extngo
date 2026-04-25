@@ -5,7 +5,13 @@ import Image from 'next/image'
 import { m, AnimatePresence, LazyMotion, domAnimation } from 'framer-motion'
 import { fadeDown, menuPanel, slideInRight, buttonTap } from '@/lib/motion'
 
-const LINKS = ['Home', 'Products', 'Reviews', 'About', 'Contact']
+const LINKS = [
+  { label: 'Home',     href: '#' },
+  { label: 'Products', href: '#product-differences' },
+  { label: 'Reviews',  href: '#reviews' },
+  { label: 'About',    href: '#use-cases' },
+  { label: 'Contact',  href: '#contact' },
+]
 
 export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
   const [onHero, setOnHero] = useState(true)
@@ -78,8 +84,8 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
         >
           {LINKS.map((l, i) => (
             <m.a
-              key={l}
-              href="#"
+              key={l.label}
+              href={l.href}
               className={`navlink ${i === 0 ? 'active' : ''}`}
               style={{ color: textColor, transition: 'color 0.35s ease, opacity 0.2s' }}
               variants={fadeDown}
@@ -87,7 +93,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
               animate="visible"
               transition={{ delay: delayBase + 0.08 + i * 0.07 }}
             >
-              {l}
+              {l.label}
             </m.a>
           ))}
         </div>
@@ -175,8 +181,8 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
           >
             {LINKS.map((l, i) => (
               <m.a
-                key={l}
-                href="#"
+                key={l.label}
+                href={l.href}
                 onClick={() => setMenuOpen(false)}
                 custom={i}
                 variants={slideInRight}
@@ -193,7 +199,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
                   borderBottom: `1px solid ${onHero ? 'rgba(255,255,255,0.08)' : 'rgba(26,26,26,0.08)'}`,
                 }}
               >
-                {l}
+                {l.label}
               </m.a>
             ))}
 

@@ -5,22 +5,48 @@ import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
 
-const COLUMNS = [
+const AMAZON_ORANGE = 'https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1'
+
+const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: 'Product',
-    links: ['Extngo Orange (50ft)', 'Extngo Green (33ft)', 'Specs & Compare', 'B2B Inquiry', 'Bulk Orders'],
+    links: [
+      { label: 'Extngo Orange (50ft)', href: AMAZON_ORANGE },
+      { label: 'Extngo Green (33ft)', href: 'https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LW2YNJ4?ref_=ast_sto_dp&th=1' },
+      { label: 'Specs & Compare', href: '#' },
+      { label: 'B2B Inquiry', href: '#' },
+      { label: 'Bulk Orders', href: '#' },
+    ],
   },
   {
     title: 'Use Cases',
-    links: ['IT & Server Rooms', 'Conference Rooms', 'Trade Shows', 'Hotels & Hospitality', 'Home Office'],
+    links: [
+      { label: 'IT & Server Rooms', href: '#' },
+      { label: 'Conference Rooms', href: '#' },
+      { label: 'Trade Shows', href: '#' },
+      { label: 'Hotels & Hospitality', href: '#' },
+      { label: 'Home Office', href: '#' },
+    ],
   },
   {
     title: 'Company',
-    links: ['About', 'Reviews', 'Careers', 'Press Kit', 'Contact'],
+    links: [
+      { label: 'About', href: '#' },
+      { label: 'Reviews', href: '#' },
+      { label: 'Careers', href: '#' },
+      { label: 'Press Kit', href: '#' },
+      { label: 'Contact', href: '#' },
+    ],
   },
   {
     title: 'Support',
-    links: ['Help Center', 'Warranty', 'Returns', 'Shipping', 'Track Order'],
+    links: [
+      { label: 'Help Center', href: '#' },
+      { label: 'Warranty', href: '#' },
+      { label: 'Returns', href: '#' },
+      { label: 'Shipping', href: '#' },
+      { label: 'Track Order', href: '#' },
+    ],
   },
 ]
 
@@ -170,9 +196,11 @@ export default function Footer() {
                 </h4>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {col.links.map(l => (
-                    <li key={l}>
+                    <li key={l.label}>
                       <a
-                        href="#"
+                        href={l.href}
+                        target={l.href.startsWith('http') ? '_blank' : undefined}
+                        rel={l.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                         style={{
                           fontSize: 'clamp(12px,3.5vw,14px)',
                           color: '#AAAAAA',
@@ -186,7 +214,7 @@ export default function Footer() {
                           (e.currentTarget as HTMLAnchorElement).style.color = '#AAAAAA'
                         }}
                       >
-                        {l}
+                        {l.label}
                       </a>
                     </li>
                   ))}
