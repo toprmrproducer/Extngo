@@ -6,17 +6,23 @@ import Link from 'next/link'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, fadeIn, staggerContainer } from '@/lib/motion'
 
-function AmazonButton({ href, bg, bgHover, border, borderHover, color }: {
-  href: string; bg: string; bgHover: string; border: string; borderHover: string; color: string
+function AmazonButton({ href, bg, bgHover, border, borderHover, color, price }: {
+  href: string; bg: string; bgHover: string; border: string; borderHover: string; color: string; price?: string
 }) {
   return (
+    <div style={{ marginTop: 44, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+      {price && (
+        <div style={{ textAlign: 'center' }}>
+          <span style={{ fontSize: 24, fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.5px' }}>{price}</span>
+          <span style={{ fontSize: 12, color: '#8A8A8A', marginLeft: 6, fontWeight: 500 }}>on Amazon</span>
+        </div>
+      )}
     <a
       href={href}
       target={href !== '#' ? '_blank' : undefined}
       rel={href !== '#' ? 'noopener noreferrer' : undefined}
       style={{
         display: 'inline-flex', alignItems: 'center', gap: 7,
-        marginTop: 72,
         padding: '10px 20px', borderRadius: 999,
         background: bg, border: `1px solid ${border}`,
         color, fontSize: 13, fontWeight: 600,
@@ -42,6 +48,7 @@ function AmazonButton({ href, bg, bgHover, border, borderHover, color }: {
         <path d="M7 17 17 7" /><path d="M7 7h10v10" />
       </svg>
     </a>
+    </div>
   )
 }
 
@@ -178,7 +185,7 @@ export default function ProductDifferences() {
             variants={fadeUp}
             style={{ margin: '16px auto 0', color: '#3A3A3A', fontSize: 17, lineHeight: 1.55, maxWidth: 560 }}
           >
-            Compare our three models and find the perfect fit for your needs
+            Each model is built for a different setup. Find yours below.
           </m.p>
         </m.div>
 
@@ -219,6 +226,15 @@ export default function ProductDifferences() {
               EXTNGO USB-C to Ethernet
             </Link>
 
+            <div style={{ textAlign: 'center', width: '100%', marginBottom: 20 }}>
+              <p style={{ margin: 0, fontSize: 13, color: '#5A5A5A', lineHeight: 1.5 }}>
+                <span style={{ fontWeight: 700, color: '#1A1A1A' }}>Best for:</span> USB-C devices, events, offices &amp; field setups
+              </p>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 8, padding: '4px 11px', borderRadius: 6, background: 'rgba(33,150,243,0.08)', border: '1px solid rgba(33,150,243,0.18)', fontSize: 11, fontWeight: 700, color: '#1565C0', letterSpacing: '0.4px' }}>
+                Tough-Flat™ &mdash; Survives Foot &amp; Vehicle Traffic
+              </span>
+            </div>
+
             <div style={{ position: 'relative', width: '100%', maxWidth: 420, aspectRatio: '1/1', overflow: 'visible' }}>
               <div
                 style={{
@@ -249,6 +265,7 @@ export default function ProductDifferences() {
               bg="rgba(33,150,243,0.06)" bgHover="rgba(33,150,243,0.14)"
               border="rgba(33,150,243,0.2)" borderHover="rgba(33,150,243,0.45)"
               color="#1565C0"
+              price="$70.02"
             />
           </m.div>
 
@@ -273,6 +290,15 @@ export default function ProductDifferences() {
             >
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }} />
               EXTNGO Orange
+            </div>
+
+            <div style={{ textAlign: 'center', width: '100%', marginBottom: 20 }}>
+              <p style={{ margin: 0, fontSize: 13, color: '#5A5A5A', lineHeight: 1.5 }}>
+                <span style={{ fontWeight: 700, color: '#1A1A1A' }}>Best for:</span> Large rooms, conference setups &amp; IT fieldwork
+              </p>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 8, padding: '4px 11px', borderRadius: 6, background: 'rgba(232,67,26,0.08)', border: '1px solid rgba(232,67,26,0.18)', fontSize: 11, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.4px' }}>
+                50ft Reach &mdash; Cascadable to 100ft
+              </span>
             </div>
 
             <div style={{ position: 'relative', width: '100%', maxWidth: 420, aspectRatio: '1/1', overflow: 'visible' }}>
@@ -300,6 +326,7 @@ export default function ProductDifferences() {
               bg="rgba(232,67,26,0.06)" bgHover="rgba(232,67,26,0.14)"
               border="rgba(232,67,26,0.2)" borderHover="rgba(232,67,26,0.45)"
               color="var(--accent)"
+              price="$79.99"
             />
           </m.div>
         </div>
@@ -325,6 +352,15 @@ export default function ProductDifferences() {
           >
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4CAF50' }} />
             EXTNGO Green
+          </div>
+
+          <div style={{ textAlign: 'center', width: '100%', marginBottom: 20 }}>
+            <p style={{ margin: 0, fontSize: 13, color: '#5A5A5A', lineHeight: 1.5 }}>
+              <span style={{ fontWeight: 700, color: '#1A1A1A' }}>Best for:</span> Home office &amp; everyday travel
+            </p>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 8, padding: '4px 11px', borderRadius: 6, background: 'rgba(76,175,80,0.08)', border: '1px solid rgba(76,175,80,0.18)', fontSize: 11, fontWeight: 700, color: '#2E7D32', letterSpacing: '0.4px' }}>
+              Lightest Model &mdash; $10 Less Than Orange
+            </span>
           </div>
 
           <div style={{ position: 'relative', width: '100%', maxWidth: 420, aspectRatio: '1/1', overflow: 'visible' }}>
@@ -357,6 +393,7 @@ export default function ProductDifferences() {
             bg="rgba(76,175,80,0.06)" bgHover="rgba(76,175,80,0.14)"
             border="rgba(76,175,80,0.2)" borderHover="rgba(76,175,80,0.45)"
             color="#2E7D32"
+            price="$69.99"
           />
         </m.div>
       </section>
