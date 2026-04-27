@@ -38,7 +38,7 @@ const CARDS = [
   { title: 'IT Server Rooms',      badge: 'Enterprise',   stat: '50ft',  sub: 'Rack to rack runs',      bg: '#1C2128', icon: <ServerIcon />,     image: '/It.webp' },
   { title: 'Conference Rooms',     badge: 'AV Install',   stat: '1Gbps', sub: 'Zero trip hazards',      bg: '#1A2E1A', icon: <ConferenceIcon />, image: '/Conference.webp' },
   { title: 'Hotel & Hospitality',  badge: 'Facilities',   stat: 'CAT6',  sub: 'Under carpet routing',   bg: '#1A1F2E', icon: <HotelIcon />,      image: '/Hotel.jpeg' },
-  { title: 'Trade Shows & Events', badge: 'On the Road',  stat: '33ft',  sub: 'Fast deploy & retract',  bg: '#2A1F14', icon: <EventIcon />,      image: '/Event.jpeg' },
+  { title: 'Trade Shows & Events', badge: 'On the Road',  stat: '33ft',  sub: 'Fast deploy & retract',  bg: '#2A1F14', icon: <EventIcon />,      image: '/Event.webp' },
   { title: 'Home Office',          badge: 'Remote Work',  stat: 'Flat',  sub: 'Clean desk setups',      bg: '#1E1428', icon: <HomeOfficeIcon />, image: '/house.webp' },
 ]
 
