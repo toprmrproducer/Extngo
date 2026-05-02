@@ -2,20 +2,31 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { m, AnimatePresence, LazyMotion, domAnimation } from 'framer-motion'
 import { fadeDown, menuPanel, slideInRight, buttonTap } from '@/lib/motion'
 
 const LINKS = [
-  { label: 'Home',     href: '#' },
-  { label: 'Products', href: '#product-differences' },
-  { label: 'Reviews',  href: '#reviews' },
-  { label: 'About',    href: '#use-cases' },
-  { label: 'Contact',  href: '#contact' },
+  { label: 'Home',     href: '/',                  hash: false },
+  { label: 'Products', href: '/#product-differences', hash: true  },
+  { label: 'Reviews',  href: '/#reviews',           hash: true  },
+  { label: 'About',    href: '/#use-cases',          hash: true  },
+  { label: 'Blog',     href: '/blog',               hash: false },
+  { label: 'Contact',  href: '/#contact',            hash: true  },
 ]
 
 export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
   const [onHero, setOnHero] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  // Determine active link based on current pathname
+  const getActive = (href: string) => {
+    if (href === '/blog') return pathname.startsWith('/blog')
+    if (href === '/') return pathname === '/'
+    return false
+  }
 
   useEffect(() => {
     const check = () => setOnHero(window.scrollY < window.innerHeight * 0.85)
@@ -67,15 +78,17 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
           transition={{ delay: delayBase }}
           style={{ position: 'relative', zIndex: 2 }}
         >
-          <Image
-            src="/logo.png"
-            alt="Extngo"
-            width={110}
-            height={36}
-            style={{ objectFit: 'contain', transition: 'filter 0.35s ease' }}
-            sizes="(max-width: 480px) 90px, 110px"
-            priority
-          />
+          <Link href="/" style={{ display: 'block' }}>
+            <Image
+              src="/logo.png"
+              alt="Extngo"
+              width={110}
+              height={36}
+              style={{ objectFit: 'contain', transition: 'filter 0.35s ease' }}
+              sizes="(max-width: 480px) 90px, 110px"
+              priority
+            />
+          </Link>
         </m.div>
 
         {/* Desktop center links */}
@@ -83,18 +96,21 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
           className="hidden md:flex gap-9 absolute left-1/2 -translate-x-1/2"
         >
           {LINKS.map((l, i) => (
-            <m.a
+            <m.div
               key={l.label}
-              href={l.href}
-              className={`navlink ${i === 0 ? 'active' : ''}`}
-              style={{ color: textColor, transition: 'color 0.35s ease, opacity 0.2s' }}
               variants={fadeDown}
               initial="hidden"
               animate="visible"
               transition={{ delay: delayBase + 0.08 + i * 0.07 }}
             >
-              {l.label}
-            </m.a>
+              <Link
+                href={l.href}
+                className={`navlink${getActive(l.href) ? ' active' : ''}`}
+                style={{ color: textColor, transition: 'color 0.35s ease, opacity 0.2s' }}
+              >
+                {l.label}
+              </Link>
+            </m.div>
           ))}
         </div>
 
@@ -180,27 +196,31 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
             }}
           >
             {LINKS.map((l, i) => (
-              <m.a
+              <m.div
                 key={l.label}
-                href={l.href}
-                onClick={() => setMenuOpen(false)}
                 custom={i}
                 variants={slideInRight}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="mobile-menu-link"
-                style={{
-                  padding: '14px 0',
-                  fontSize: 20,
-                  fontWeight: 600,
-                  color: onHero ? '#FFFFFF' : '#1A1A1A',
-                  textDecoration: 'none',
-                  borderBottom: `1px solid ${onHero ? 'rgba(255,255,255,0.08)' : 'rgba(26,26,26,0.08)'}`,
-                }}
               >
-                {l.label}
-              </m.a>
+                <Link
+                  href={l.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="mobile-menu-link"
+                  style={{
+                    display: 'block',
+                    padding: '14px 0',
+                    fontSize: 20,
+                    fontWeight: 600,
+                    color: onHero ? '#FFFFFF' : '#1A1A1A',
+                    textDecoration: 'none',
+                    borderBottom: `1px solid ${onHero ? 'rgba(255,255,255,0.08)' : 'rgba(26,26,26,0.08)'}`,
+                  }}
+                >
+                  {l.label}
+                </Link>
+              </m.div>
             ))}
 
             <m.button
