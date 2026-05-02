@@ -98,10 +98,10 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 className="font-display"
                 style={{ margin: 0, fontSize: 'clamp(36px, 5.5vw, 76px)', lineHeight: 1.05, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.03em' }}
               >
-                <div style={{ overflow: 'hidden' }}><Word delay={0.45}>Never</Word></div>
-                <div style={{ overflow: 'hidden' }}><Word delay={0.6}>lose&nbsp;your</Word></div>
+                <div style={{ overflow: 'hidden' }}><Word delay={0.45}>50 Feet of</Word></div>
+                <div style={{ overflow: 'hidden' }}><Word delay={0.6}>Network.</Word></div>
                 <div style={{ overflow: 'hidden', marginTop: 4 }}>
-                  <Word delay={0.95} className="orange-sweep">network&nbsp;again</Word>
+                  <Word delay={0.95} className="orange-sweep">In Your Backpack.</Word>
                 </div>
               </h1>
 
@@ -118,9 +118,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                   fontWeight: 400,
                 }}
               >
-                The world&apos;s first retractable flat ethernet cable reel.
-                <br />
-                50ft CAT6, zero tangles, zero trip hazards.
+                Hardwire anywhere in seconds with a flat, retractable CAT6 cable. No tangles. No setup. No dependence on weak WiFi.
               </m.p>
 
               {/* CTA row */}
@@ -147,7 +145,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
                   </svg>
-                  Shop on Amazon
+                  Shop on Amazon →
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                   </svg>
@@ -169,7 +167,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
                   </svg>
-                  B2B Inquiry
+                  Bulk Orders / B2B Inquiry
                 </m.button>
               </m.div>
 
@@ -187,16 +185,36 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                       </svg>
                     ))}
                   </span>
-                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>4.9</span>
-                  <span>· 1,284 reviews</span>
+                  <span style={{ color: '#FFFFFF', fontWeight: 600 }}>4.9 Rating</span>
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                  Free shipping · 30-day returns
+                  Free Shipping
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  30-Day Returns
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  Used by IT Pros
                 </span>
               </m.div>
+
+              {/* Micro copy */}
+              <m.p
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                transition={{ duration: 0.7, delay: 1.9, ease: [0,0,0.2,1] }}
+                style={{ marginTop: 16, color: 'rgba(255,255,255,0.4)', fontSize: 12, fontStyle: 'italic' }}
+              >
+                Deploy a stable wired connection anywhere in under 10 seconds.
+              </m.p>
 
             </div>
         </div>
