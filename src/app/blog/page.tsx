@@ -8,7 +8,7 @@ import BlogTagFilterClient from '@/components/blog/BlogTagFilterClient'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
 
-export const revalidate = 3600
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Blog | Extngo',
