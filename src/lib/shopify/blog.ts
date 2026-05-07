@@ -39,11 +39,21 @@ interface GetBlogsData {
 export async function getAllArticles(first = 20): Promise<Article[]> {
   try {
     const data = await shopifyFetch<GetAllArticlesData>(GET_ALL_ARTICLES, { first })
-    return data.blogs.edges.flatMap(({ node: blog }) =>
-      blog.articles.edges.map(({ node: article }) => ({
-        ...article,
-        blog: { handle: blog.handle, title: blog.title },
-      }))
+    const articles: Article[] = []
+    
+    for (const blogEdge of data.blogs.edges) {
+      const blog = blogEdge.node
+      for (const articleEdge of blog.articles.edges) {
+        articles.push({
+          ...articleEdge.node,
+          blog: { handle: blog.handle, title: blog.title },
+        })
+      }
+    }
+    
+    // Sort by published date, newest first
+    return articles.sort(
+      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     )
   } catch (err) {
     console.error('[Shopify] getAllArticles error:', err)
