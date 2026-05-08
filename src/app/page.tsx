@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion'
+import Script from 'next/script'
 import HeroSafe from '@/components/HeroSafe'
 import PinnedProduct from '@/components/PinnedProduct'
 import ProductDetail from '@/components/ProductDetail'
@@ -22,8 +23,51 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Extngo Retractable Ethernet Cable',
+    description: 'The world\'s first retractable flat ethernet cable reel. 50ft CAT6, zero tangles, zero trip hazards.',
+    image: 'https://extngo-eight.vercel.app/hero.png',
+    brand: {
+      '@type': 'Brand',
+      name: 'Extngo',
+    },
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      priceCurrency: 'USD',
+      url: 'https://extngo-eight.vercel.app',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '2000',
+    },
+  }
+
+  const organizationData = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Extngo',
+    url: 'https://extngo-eight.vercel.app',
+    logo: 'https://extngo-eight.vercel.app/logo.png',
+    sameAs: [],
+  }
+
   return (
     <LazyMotion features={domAnimation}>
+      <Script
+        id="structured-data-product"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <Script
+        id="structured-data-organization"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
+      />
+
       {/* Fixed navbar */}
       <NavBar delayBase={0.05} />
 

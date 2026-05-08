@@ -32,12 +32,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = await getArticleByHandle(blogHandle, articleHandle)
   if (!article) return { title: 'Article | Extngo' }
 
+  const ogImage = article.image ? article.image.url : '/hero.png'
+  const description = article.excerpt || 'Read this article on Extngo Blog'
+
   return {
     title: `${article.title} | Extngo Blog`,
-    description: article.excerpt || undefined,
-    openGraph: article.image
-      ? { images: [{ url: article.image.url, alt: article.image.altText }] }
-      : undefined,
+    description,
+    keywords: article.tags,
+    authors: [{ name: article.author?.name || 'Extngo' }],
+    openGraph: {
+      type: 'article',
+      title: article.title,
+      description,
+      url: `https://extngo-eight.vercel.app/blog/${blogHandle}/${articleHandle}`,
+      publishedTime: article.publishedAt,
+      authors: [article.author?.name || 'Extngo'],
+      tags: article.tags,
+      images: [
+        {
+          url: ogImage,
+          alt: article.image?.altText || article.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description,
+      images: [ogImage],
+    },
+    alternates: {
+      canonical: `https://extngo-eight.vercel.app/blog/${blogHandle}/${articleHandle}`,
+    },
   }
 }
 

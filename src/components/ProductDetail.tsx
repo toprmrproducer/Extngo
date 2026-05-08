@@ -124,9 +124,10 @@ export default function ProductDetail() {
             </text>
           </svg>
 
-          {/* Anchor for PinnedProduct */}
+          {/* Anchor for PinnedProduct (desktop) */}
           <div
             data-product-anchor="detail"
+            className="hidden md:block"
             style={{
               position: 'relative',
               width: 'clamp(260px,38vw,460px)',
@@ -134,6 +135,26 @@ export default function ProductDetail() {
               pointerEvents: 'none',
             }}
           />
+
+          {/* Static product image (mobile) */}
+          <m.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
+            transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 0.84, 0.44, 1] }}
+            className="md:hidden"
+            style={{
+              position: 'relative',
+              width: 'clamp(260px,70vw,460px)',
+              aspectRatio: '1/1',
+              filter: 'drop-shadow(0 40px 60px rgba(60,40,20,.3)) drop-shadow(0 15px 25px rgba(60,40,20,.18))',
+            }}
+          >
+            <img
+              src="/product-reel.png"
+              alt="Extngo 50ft retractable CAT6 cable reel"
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </m.div>
 
           {/* Floating micro-specs */}
           <m.div

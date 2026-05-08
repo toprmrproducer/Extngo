@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
@@ -178,8 +179,52 @@ export default function BluePage() {
   const countdown = useCountdown(LAUNCH_DATE)
   const launched = LAUNCH_DATE.getTime() <= Date.now()
 
+  const productStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'EXTNGO USB-C to Ethernet Retractable Cable',
+    description: 'Go beyond USB-C limits. Get real wired connectivity — 15 metres of gigabit ethernet in a flat retractable reel. Built-in adapter, plug and play.',
+    image: 'https://extngo-eight.vercel.app/product-blue.png',
+    brand: {
+      '@type': 'Brand',
+      name: 'Extngo',
+    },
+    offers: {
+      '@type': 'Offer',
+      url: AMAZON_BLUE,
+      priceCurrency: 'USD',
+      availability: launched ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+      seller: {
+        '@type': 'Organization',
+        name: 'Amazon',
+      },
+    },
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'Cable Length',
+        value: '15 Metres',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Interface',
+        value: 'USB-C to Ethernet (RJ45)',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Speed',
+        value: 'Gigabit Ethernet (1000 Mbps)',
+      },
+    ],
+  }
+
   return (
     <LazyMotion features={domAnimation}>
+      <Script
+        id="product-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productStructuredData) }}
+      />
       <div style={{ fontFamily: 'var(--font-geist)', color: '#1A1A1A' }}>
         <NavBar />
 

@@ -151,6 +151,7 @@ export default function PinnedProduct() {
       <div
         ref={wrapRef}
         aria-hidden="true"
+        className="hidden md:block"
         style={{
           position: 'fixed',
           top: 0, left: 0,

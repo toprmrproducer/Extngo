@@ -261,12 +261,29 @@ export default function ProductDifferences() {
               }}>
                 {product.hasAnchor ? (
                   <>
-                    <div style={{
-                      position: 'absolute', inset: 0, borderRadius: 16,
-                      background: `rgba(${product.accentRgb},0.04)`,
-                      border: `1.5px dashed rgba(${product.accentRgb},0.18)`,
-                    }} />
-                    <div data-product-anchor="orange" style={{ position: 'absolute', inset: 0 }} />
+                    {/* Desktop: anchor for floating product */}
+                    <div className="hidden md:block">
+                      <div style={{
+                        position: 'absolute', inset: 0, borderRadius: 16,
+                        background: `rgba(${product.accentRgb},0.04)`,
+                        border: `1.5px dashed rgba(${product.accentRgb},0.18)`,
+                      }} />
+                      <div data-product-anchor="orange" style={{ position: 'absolute', inset: 0 }} />
+                    </div>
+                    {/* Mobile: static image */}
+                    <div className="md:hidden" style={{
+                      position: 'relative', width: '100%', height: '100%',
+                      animation: product.floatAnim,
+                      filter: product.shadow,
+                      willChange: 'transform',
+                    }}>
+                      <Image
+                        src="/product-reel.png"
+                        alt="Extngo 50ft retractable CAT6 cable reel"
+                        fill
+                        style={{ objectFit: 'contain' }}
+                      />
+                    </div>
                   </>
                 ) : (
                   <div style={{

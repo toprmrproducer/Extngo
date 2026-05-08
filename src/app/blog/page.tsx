@@ -13,6 +13,20 @@ export const revalidate = 60
 export const metadata: Metadata = {
   title: 'Blog | Extngo',
   description: 'Wiring guides and field stories from Extngo.',
+  openGraph: {
+    title: 'Blog | Extngo',
+    description: 'Wiring guides and field stories from Extngo.',
+    type: 'website',
+    url: 'https://extngo-eight.vercel.app/blog',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog | Extngo',
+    description: 'Wiring guides and field stories from Extngo.',
+  },
+  alternates: {
+    canonical: 'https://extngo-eight.vercel.app/blog',
+  },
 }
 
 interface PageProps {

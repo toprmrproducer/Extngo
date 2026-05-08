@@ -14,6 +14,14 @@ const nextConfig = {
       },
     ],
   },
+  // Enable compression
+  compress: true,
+  // Generate ETags for caching
+  generateEtags: true,
+  // Trailing slash configuration
+  trailingSlash: false,
+  // Power by header removal for security
+  poweredByHeader: false,
 }
 
 module.exports = nextConfig
