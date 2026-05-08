@@ -5,6 +5,7 @@ interface ExtngoLogoProps {
   isDark?: boolean
 }
 
+
 export default function ExtngoLogo({ size = 22, isDark = false }: ExtngoLogoProps) {
   const textColor = isDark ? '#FFFFFF' : 'var(--ink)'
   const textColor2 = isDark ? 'rgba(255,255,255,0.7)' : 'var(--ink-2)'
