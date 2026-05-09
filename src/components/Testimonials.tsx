@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
 
@@ -67,28 +67,28 @@ type VideoItem = {
 type Item = TextItem | VideoItem
 
 const COLUMN_LEFT: Item[] = [
-  { kind: 'text',  name: 'James Harlow',       role: 'IT Director, NovaTech',        quote: 'Ran 50ft through our server room without a single snag. Buttery smooth retract — nothing else comes close.', rating: 5 },
+  { kind: 'text',  name: 'Patricia',           role: 'Verified Purchase, Mexico',    quote: 'Great, portable and does not get in the way or tangle, like normal cables. Excellent purchase.', rating: 5 },
   { kind: 'video', name: 'Customer Review',    role: 'Verified Purchase',            src: '/review.mp4' },
-  { kind: 'text',  name: 'Isabella Lester',    role: 'Home Office Setup',            quote: 'Clean desk, clean mind. Extngo made my WFH setup look professional.', rating: 5 },
+  { kind: 'text',  name: 'Mr R A Harrison',    role: 'Verified Purchase, UK',        quote: 'Just need a temporary CAT5 cable, this is perfect. Occasionally I need to work from home and have to connect my work phone to the router - this is an ideal solution and is easy to store.', rating: 5 },
   { kind: 'video', name: 'Customer Review',    role: 'Verified Purchase',            src: '/review3.mp4' },
-  { kind: 'text',  name: 'Elizabeth Hallward', role: 'Office Manager',               quote: 'Ordered three for our open-plan office. Cables are finally invisible. Worth every penny.', rating: 5 },
-  { kind: 'text',  name: 'Henry Vane',         role: 'Co-Founder, Loremipsum Co.',   quote: "Best CAT6 I've used. The retract is satisfying every single time.", rating: 4 },
+  { kind: 'text',  name: 'Javier',             role: 'Verified Purchase, Spain',     quote: 'Something expensive but easy to extend and pick up.', rating: 5 },
+  { kind: 'text',  name: 'HCM',                role: 'Verified Purchase, Germany',   quote: 'Since this cable has been used, there are no more dropouts when playing. Definitely a purchase recommendation.', rating: 5 },
 ]
 
 const COLUMN_CENTER: Item[] = [
-  { kind: 'text',  name: 'Priya Menon',    role: 'AV Specialist',    quote: 'I really appreciate how clean the install looks. No more gaffer tape over cables in conference rooms.', rating: 5 },
+  { kind: 'text',  name: 'Undisclosed',    role: 'Verified Purchase, Singapore', quote: "It's a good extendable cable, eliminates all mess. I needed the cable to use AirLink, but also need to remove after use, as my computer is far away from the living room where my router is.", rating: 5 },
   { kind: 'video', name: 'Customer Review', role: 'Verified Purchase', src: '/review1.mp4' },
-  { kind: 'text',  name: 'Victoria Weston',role: 'Facilities Manager, Meridian', quote: 'Replaced all our under-carpet runs with Extngo. Zero trip hazards. The flat profile is genuinely impressive.', rating: 5 },
+  { kind: 'text',  name: 'Mr. Jean Delattre',role: 'Verified Purchase, France', quote: 'A bit pricey but amazing. The cable rolls up easily and quickly. To see the outfit over time.', rating: 5 },
   { kind: 'video', name: 'Customer Review', role: 'Verified Purchase', src: '/review4.mp4' },
-  { kind: 'text',  name: 'Daniel Ortiz',   role: 'Studio Tech',      quote: 'Pulls taut, reels clean. Our livestream rig finally looks the way it sounds.', rating: 5 },
+  { kind: 'text',  name: 'Alexander',   role: 'Verified Purchase, Netherlands',      quote: 'Better than expected, just perfect', rating: 5 },
 ]
 
 const COLUMN_RIGHT: Item[] = [
-  { kind: 'text',  name: 'Linda Shaw',     role: 'Event Producer',          quote: 'Set up and struck in under 10 minutes at a trade show. Game changer for live events.', rating: 5 },
+  { kind: 'text',  name: 'Alberto',     role: 'Verified Purchase, Italy',          quote: 'Perfect solution for obtaining the reliability and transfer speed that only a cable connection can provide. The cable is flat, which allows it to be easily passed under the ports.', rating: 5 },
   { kind: 'video', name: 'Customer Review', role: 'Verified Purchase',       src: '/review2.mp4' },
-  { kind: 'text',  name: 'Basil Hallward', role: 'Co-Founder, Example.com', quote: 'Build quality is exceptional. Feels like it was designed by someone who actually runs cable for a living.', rating: 5 },
-  { kind: 'text',  name: 'Sofia Nakamura', role: 'Hotel Operations',        quote: 'We swapped gaffer tape for Extngo on every ballroom. Guests stopped tripping. Maintenance got their weekends back.', rating: 5 },
-  { kind: 'text',  name: 'Richard Ames',   role: 'Contractor',              quote: 'Rugged enough for my toolbox, clean enough for the client walkthrough. Rare combo.', rating: 5 },
+  { kind: 'text',  name: 'Boerke', role: 'Verified Purchase, Belgium', quote: 'Handy considering the 15 meter long cable', rating: 5 },
+  { kind: 'text',  name: 'Matt', role: 'Verified Purchase, Canada',        quote: 'Easy product to use that offers lots of range', rating: 5 },
+  { kind: 'text',  name: 'HCM',   role: 'Verified Purchase, Germany',              quote: 'We actually have good Internet. Nevertheless, it is still the case when it comes to gaming that a LAN cable is still the best. There were always small dropouts with WLAN. But putting the LAN cable across the living room over and over again is quite annoying.', rating: 5 },
 ]
 
 // ── Text card ────────────────────────────────────────────────────────────────
@@ -139,9 +139,24 @@ function TestimonialCard({ t }: { t: TextItem }) {
 // ── Video card ───────────────────────────────────────────────────────────────
 function VideoCard({ v }: { v: VideoItem }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [muted, setMuted] = useState(true)
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(false)
+  const isInView = useInView(containerRef, { margin: '100px' })
+
+  // Play/pause based on visibility
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isInView && loaded) {
+        videoRef.current.play().catch(() => {
+          // Autoplay blocked, user interaction needed
+        })
+      } else {
+        videoRef.current.pause()
+      }
+    }
+  }, [isInView, loaded])
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -153,6 +168,7 @@ function VideoCard({ v }: { v: VideoItem }) {
 
   return (
     <div
+      ref={containerRef}
       style={{
         borderRadius: 18,
         overflow: 'hidden',
@@ -165,13 +181,19 @@ function VideoCard({ v }: { v: VideoItem }) {
       {!error && (
         <video
           ref={videoRef}
-          src={v.src}
           autoPlay
           loop
           muted
           playsInline
+          preload="metadata"
           onLoadedData={() => setLoaded(true)}
           onError={() => setError(true)}
+          onCanPlay={() => {
+            // Ensure video plays after it's ready
+            videoRef.current?.play().catch(() => {
+              // Silently handle autoplay failures
+            })
+          }}
           style={{ 
             position: 'absolute', 
             inset: 0, 
@@ -181,7 +203,10 @@ function VideoCard({ v }: { v: VideoItem }) {
             opacity: loaded ? 1 : 0,
             transition: 'opacity 0.3s ease'
           }}
-        />
+        >
+          <source src={v.src} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       )}
 
       {/* Fallback for missing videos */}
