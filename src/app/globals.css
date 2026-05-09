@@ -77,6 +77,21 @@ img, video {
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(26,26,26,0.25); }
 
+/* Modal scrollbar styling */
+.modal-scroll::-webkit-scrollbar { width: 6px; }
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(26,26,26,0.2);
+  border-radius: 10px;
+}
+.modal-scroll::-webkit-scrollbar-thumb:hover { background: rgba(26,26,26,0.3); }
+
+/* B2B Modal responsive adjustments */
+@media (max-width: 640px) {
+  .b2b-modal-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* ── Reduced motion ────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

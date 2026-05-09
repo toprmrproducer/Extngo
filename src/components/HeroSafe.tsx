@@ -1,9 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import { m, LazyMotion, domAnimation } from 'framer-motion'
 import HeroScene from './HeroScene'
 import GiantWordmark from './GiantWordmark'
 import Word from './Word'
+import B2BContactModal from './B2BContactModal'
 import { fadeUp, fadeIn, staggerContainer } from '@/lib/motion'
 
 interface HeroSafeProps {
@@ -13,6 +15,8 @@ interface HeroSafeProps {
 }
 
 export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTone = 'dark' }: HeroSafeProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <LazyMotion features={domAnimation}>
       <div
@@ -152,6 +156,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 </m.a>
 
                 <m.button
+                  onClick={() => setIsModalOpen(true)}
                   className="btn btn-ghost"
                   style={{
                     background: 'rgba(255,255,255,.1)', color: '#FFFFFF',
@@ -218,6 +223,9 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
 
             </div>
         </div>
+
+        {/* B2B Contact Modal */}
+        <B2BContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </LazyMotion>
   )

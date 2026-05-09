@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { m, AnimatePresence, LazyMotion, domAnimation } from 'framer-motion'
 import { fadeDown, menuPanel, slideInRight, buttonTap } from '@/lib/motion'
+import B2BContactModal from './B2BContactModal'
 
 const LINKS = [
   { label: 'Home',     href: '/',                  hash: false },
@@ -19,6 +20,7 @@ const LINKS = [
 export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
   const [onHero, setOnHero] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const pathname = usePathname()
 
   // Determine active link based on current pathname
@@ -118,6 +120,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
         <div className="flex items-center gap-3" style={{ position: 'relative', zIndex: 2 }}>
           {/* Desktop CTA */}
           <m.button
+            onClick={() => setIsModalOpen(true)}
             className="hidden md:inline-flex items-center gap-2.5 rounded-full font-medium text-sm cursor-pointer border"
             style={{
               padding: '10px 18px',
@@ -232,7 +235,10 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
                 color: '#fff',
                 boxShadow: '0 8px 24px -8px rgba(232,67,26,.55)',
               }}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                setMenuOpen(false)
+                setIsModalOpen(true)
+              }}
               variants={fadeDown}
               initial="hidden"
               animate="visible"
@@ -250,6 +256,9 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
           </m.div>
         )}
       </AnimatePresence>
+
+      {/* B2B Contact Modal */}
+      <B2BContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </LazyMotion>
   )
 }

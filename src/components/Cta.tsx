@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
+import B2BContactModal from './B2BContactModal'
 
 const STATS = [
   { value: '2,400+', label: 'Happy Pros' },
@@ -14,6 +15,7 @@ const STATS = [
 export default function Cta() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-12% 0px' })
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <LazyMotion features={domAnimation}>
@@ -149,6 +151,7 @@ export default function Cta() {
                 </svg>
               </m.a>
               <m.button
+                onClick={() => setIsModalOpen(true)}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 style={{
@@ -265,6 +268,9 @@ export default function Cta() {
             />
           </m.div>
         </div>
+
+        {/* B2B Contact Modal */}
+        <B2BContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </section>
     </LazyMotion>
   )
