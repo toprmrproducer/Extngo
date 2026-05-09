@@ -65,7 +65,7 @@ export default function HeroStatic() {
             }}
           >
             <div>50 Feet of</div>
-            <div>Network.</div>
+            <div>Ethernet Cable.</div>
             <div style={{ marginTop: 'clamp(2px, 0.5vw, 4px)' }}>
               <span className="orange-sweep">In Your Backpack.</span>
             </div>

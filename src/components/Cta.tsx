@@ -114,7 +114,7 @@ export default function Cta() {
             >
               Stop fighting cables.<br />
               <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#E8431A' }}>
-                Start shipping.
+                Pull. Plug. Done.
               </span>
             </m.h2>
 
@@ -128,7 +128,7 @@ export default function Cta() {
                 maxWidth: 480,
               }}
             >
-              Whether you&apos;re wiring a server room or a live event — Extngo deploys clean and retracts smooth. Your future self will thank you.
+              Deploy a stable wired connection in seconds. EXTNGO keeps your setup clean, portable, and ready anywhere work takes you.
             </m.p>
 
             <m.div

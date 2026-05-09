@@ -103,7 +103,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 style={{ margin: 0, fontSize: 'clamp(32px, 5.5vw, 76px)', lineHeight: 1.05, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.03em' }}
               >
                 <div style={{ overflow: 'hidden' }}><Word delay={0.45}>50 Feet of</Word></div>
-                <div style={{ overflow: 'hidden' }}><Word delay={0.6}>Network.</Word></div>
+                <div style={{ overflow: 'hidden' }}><Word delay={0.6}>Ethernet Cable.</Word></div>
                 <div style={{ overflow: 'hidden', marginTop: 'clamp(2px, 0.5vw, 4px)' }}>
                   <Word delay={0.95} className="orange-sweep">In Your Backpack.</Word>
                 </div>
