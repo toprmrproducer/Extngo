@@ -4,16 +4,20 @@ import './globals.css'
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['800'], // Only load the weight used in hero
   variable: '--font-bricolage',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 const geist = Geist({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  weight: ['400', '600'], // Only critical weights
   variable: '--font-geist',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 export const metadata: Metadata = {
@@ -90,8 +94,12 @@ export default function RootLayout({
         <link rel="icon" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
         
-        {/* Preload critical assets */}
-        <link rel="preload" as="image" href="/product-reel.png" fetchPriority="high" />
+        {/* Critical CSS for instant hero render */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          .font-display{font-family:var(--font-bricolage);letter-spacing:-0.02em}
+          .orange-sweep{color:#E8431A;position:relative;display:inline-block}
+          .btn{display:inline-flex;align-items:center;gap:10px;border-radius:8px;font-weight:600;cursor:pointer;border:0;font-family:var(--font-geist)}
+        `}} />
       </head>
       <body>{children}</body>
     </html>

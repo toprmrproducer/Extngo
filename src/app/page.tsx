@@ -1,13 +1,13 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion'
 import Script from 'next/script'
 import dynamic from 'next/dynamic'
-import HeroSafe from '@/components/HeroSafe'
-import PinnedProduct from '@/components/PinnedProduct'
+import HeroStatic from '@/components/HeroStatic'
 import ProductDetail from '@/components/ProductDetail'
 import NavBar from '@/components/NavBar'
+
+// Lazy load interactive hero after initial paint
+const HeroInteractive = dynamic(() => import('@/components/HeroInteractive'), {
+  loading: () => null
+})
 
 // Lazy load below-the-fold components
 const ProductDifferences = dynamic(() => import('@/components/ProductDifferences'), {
@@ -21,16 +21,10 @@ const Testimonials = dynamic(() => import('@/components/Testimonials'), {
 })
 const Cta = dynamic(() => import('@/components/Cta'))
 const Footer = dynamic(() => import('@/components/Footer'))
+const PinnedProduct = dynamic(() => import('@/components/PinnedProduct'))
 
 export default function Home() {
-  const [heroVisible, setHeroVisible] = useState(true)
 
-  useEffect(() => {
-    const onScroll = () => setHeroVisible(window.scrollY < window.innerHeight * 1.1)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -65,7 +59,7 @@ export default function Home() {
   }
 
   return (
-    <LazyMotion features={domAnimation}>
+    <>
       <Script
         id="structured-data-product"
         type="application/ld+json"
@@ -79,29 +73,14 @@ export default function Home() {
         strategy="afterInteractive"
       />
 
+      {/* Static hero for instant LCP */}
+      <HeroStatic />
+      
+      {/* Interactive hero loads after paint */}
+      <HeroInteractive />
+
       {/* Fixed navbar */}
       <NavBar delayBase={0.05} />
-
-      {/* Hero — AnimatePresence gives it a proper exit animation */}
-      <AnimatePresence>
-        {heroVisible && (
-          <m.div
-            key="hero"
-            initial={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.5, ease: [0.4, 0, 1, 1] } }}
-            style={{
-              position: 'fixed',
-              top: 0, left: 0, right: 0,
-              width: '100%',
-              height: '100dvh',
-              overflow: 'hidden',
-              zIndex: 1,
-            }}
-          >
-            <HeroSafe animKey={0} showWordmark={true} />
-          </m.div>
-        )}
-      </AnimatePresence>
 
       {/* Spacer */}
       <div style={{ height: '100dvh', position: 'relative', zIndex: 2, pointerEvents: 'none' }} />
@@ -116,6 +95,6 @@ export default function Home() {
         <Cta />
         <Footer />
       </div>
-    </LazyMotion>
+    </>
   )
 }

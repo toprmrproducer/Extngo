@@ -27,6 +27,11 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
+  // Experimental optimizations for LCP
+  experimental: {
+    optimizePackageImports: ['framer-motion'],
+  },
+  
   // Security headers
   async headers() {
     return [
