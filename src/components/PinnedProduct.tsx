@@ -176,12 +176,15 @@ export default function PinnedProduct() {
               animation: 'heroFloat 8s 2s ease-in-out infinite',
               filter: 'drop-shadow(0 40px 60px rgba(60,40,20,.3)) drop-shadow(0 15px 25px rgba(60,40,20,.18))',
               willChange: 'transform',
+              position: 'relative',
             }}
           >
             <Image
               src="/product-reel.png"
               alt="Extngo 50ft retractable CAT6 cable reel"
               fill
+              priority
+              sizes="(max-width: 768px) 0vw, 40vw"
               style={{ objectFit: 'contain' }}
             />
           </div>

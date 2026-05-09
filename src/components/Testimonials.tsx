@@ -140,6 +140,8 @@ function TestimonialCard({ t }: { t: TextItem }) {
 function VideoCard({ v }: { v: VideoItem }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [muted, setMuted] = useState(true)
+  const [loaded, setLoaded] = useState(false)
+  const [error, setError] = useState(false)
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -160,15 +162,43 @@ function VideoCard({ v }: { v: VideoItem }) {
         boxShadow: '0 10px 30px rgba(0,0,0,0.18)',
       }}
     >
-      <video
-        ref={videoRef}
-        src={v.src}
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-      />
+      {!error && (
+        <video
+          ref={videoRef}
+          src={v.src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedData={() => setLoaded(true)}
+          onError={() => setError(true)}
+          style={{ 
+            position: 'absolute', 
+            inset: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover',
+            opacity: loaded ? 1 : 0,
+            transition: 'opacity 0.3s ease'
+          }}
+        />
+      )}
+
+      {/* Fallback for missing videos */}
+      {error && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)',
+        }}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+        </div>
+      )}
 
       {/* Gradient overlay — keeps info legible */}
       <div
@@ -206,41 +236,43 @@ function VideoCard({ v }: { v: VideoItem }) {
         Video
       </div>
 
-      {/* Mute toggle */}
-      <button
-        onClick={toggleMute}
-        aria-label={muted ? 'Unmute' : 'Mute'}
-        style={{
-          position: 'absolute',
-          top: 10,
-          right: 10,
-          width: 30,
-          height: 30,
-          borderRadius: '50%',
-          background: 'rgba(0,0,0,0.45)',
-          border: '1px solid rgba(255,255,255,0.22)',
-          backdropFilter: 'blur(6px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          color: '#fff',
-          zIndex: 2,
-          padding: 0,
-        }}
-      >
-        {muted ? (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-            <line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
-          </svg>
-        ) : (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-          </svg>
-        )}
-      </button>
+      {/* Mute toggle - only show if video loaded */}
+      {loaded && !error && (
+        <button
+          onClick={toggleMute}
+          aria-label={muted ? 'Unmute' : 'Mute'}
+          style={{
+            position: 'absolute',
+            top: 10,
+            right: 10,
+            width: 30,
+            height: 30,
+            borderRadius: '50%',
+            background: 'rgba(0,0,0,0.45)',
+            border: '1px solid rgba(255,255,255,0.22)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#fff',
+            zIndex: 2,
+            padding: 0,
+          }}
+        >
+          {muted ? (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+          ) : (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+          )}
+        </button>
+      )}
 
       {/* Bottom info */}
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '14px 16px 16px', zIndex: 2 }}>
@@ -499,18 +531,6 @@ export default function Testimonials() {
               who made the switch to Extngo
             </p>
           </div>
-
-          <m.button
-            className="btn btn-primary"
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            style={{ fontSize: 13, padding: '11px 22px' }}
-          >
-            Read All Reviews
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-            </svg>
-          </m.button>
         </m.div>
       </section>
     </LazyMotion>

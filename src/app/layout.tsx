@@ -19,7 +19,7 @@ const geist = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL('https://extngo-eight.vercel.app'),
   title: {
-    default: 'Extngo · Hero',
+    default: 'Extngo',
     template: '%s | Extngo',
   },
   description: 'The world\'s first retractable flat ethernet cable reel. 50ft CAT6, zero tangles, zero trip hazards.',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://extngo-eight.vercel.app',
     siteName: 'Extngo',
-    title: 'Extngo · Hero',
+    title: 'Extngo',
     description: 'The world\'s first retractable flat ethernet cable reel. 50ft CAT6, zero tangles, zero trip hazards.',
     images: [
       {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Extngo · Hero',
+    title: 'Extngo',
     description: 'The world\'s first retractable flat ethernet cable reel. 50ft CAT6, zero tangles, zero trip hazards.',
     images: ['/hero.png'],
   },
@@ -89,6 +89,13 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
+        
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://www.amazon.com" />
+        <link rel="dns-prefetch" href="https://www.amazon.com" />
+        
+        {/* Preload critical assets */}
+        <link rel="preload" as="image" href="/product-reel.png" fetchPriority="high" />
       </head>
       <body>{children}</body>
     </html>

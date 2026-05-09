@@ -69,7 +69,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
           display: 'flex',
           alignItems: 'center',
           padding: '0 clamp(20px, 6vw, 96px)',
-          paddingTop: 'clamp(70px,10vh,96px)',
+          paddingTop: 'clamp(100px,12vh,120px)',
           paddingBottom: 'clamp(28px,5vh,48px)',
         }}>
             <div style={{ maxWidth: 640, width: '100%' }}>
@@ -80,27 +80,27 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 transition={{ duration: 0.7, delay: 0.3, ease: [0,0,0.2,1] }}
                 className="inline-flex items-center gap-2.5 rounded-full"
                 style={{
-                  padding: '8px 14px',
+                  padding: 'clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 14px)',
                   background: 'rgba(232,67,26,.15)',
                   border: '1px solid rgba(232,67,26,.35)',
                   color: 'var(--accent)',
-                  fontSize: 12, fontWeight: 600,
-                  letterSpacing: '2px', textTransform: 'uppercase',
-                  marginBottom: 20,
+                  fontSize: 'clamp(10px, 1.2vw, 12px)', fontWeight: 600,
+                  letterSpacing: 'clamp(1px, 0.2vw, 2px)', textTransform: 'uppercase',
+                  marginBottom: 'clamp(12px, 2vw, 20px)',
                 }}
               >
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 0 4px rgba(232,67,26,.3)' }} />
+                <span style={{ width: 'clamp(5px, 0.6vw, 6px)', height: 'clamp(5px, 0.6vw, 6px)', borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 0 4px rgba(232,67,26,.3)' }} />
                 New · 50ft CAT6 Reel
               </m.div>
 
               {/* Headline */}
               <h1
                 className="font-display"
-                style={{ margin: 0, fontSize: 'clamp(36px, 5.5vw, 76px)', lineHeight: 1.05, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.03em' }}
+                style={{ margin: 0, fontSize: 'clamp(32px, 5.5vw, 76px)', lineHeight: 1.05, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.03em' }}
               >
                 <div style={{ overflow: 'hidden' }}><Word delay={0.45}>50 Feet of</Word></div>
                 <div style={{ overflow: 'hidden' }}><Word delay={0.6}>Network.</Word></div>
-                <div style={{ overflow: 'hidden', marginTop: 4 }}>
+                <div style={{ overflow: 'hidden', marginTop: 'clamp(2px, 0.5vw, 4px)' }}>
                   <Word delay={0.95} className="orange-sweep">In Your Backpack.</Word>
                 </div>
               </h1>
@@ -110,10 +110,10 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 1.15, ease: [0,0,0.2,1] }}
                 style={{
-                  marginTop: 28, marginBottom: 0,
+                  marginTop: 'clamp(18px, 3vw, 28px)', marginBottom: 0,
                   maxWidth: 480,
                   color: 'rgba(255,255,255,0.7)',
-                  fontSize: 'clamp(15px, 1.1vw, 17px)',
+                  fontSize: 'clamp(14px, 1.1vw, 17px)',
                   lineHeight: 1.65,
                   fontWeight: 400,
                 }}

@@ -152,6 +152,9 @@ export default function ProductDetail() {
             <img
               src="/product-reel.png"
               alt="Extngo 50ft retractable CAT6 cable reel"
+              width="460"
+              height="460"
+              loading="eager"
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
           </m.div>
@@ -247,18 +250,20 @@ export default function ProductDetail() {
               >
                 Buy on Amazon →
               </m.a>
-              <m.button
+              <m.a
+                href="#product-differences"
                 style={{
                   background: 'transparent', color: 'var(--ink)',
                   border: '1.5px solid rgba(26,26,26,.18)',
                   padding: '13px 20px', borderRadius: 999,
                   fontWeight: 600, fontSize: 14, cursor: 'pointer',
+                  textDecoration: 'none', display: 'inline-flex', alignItems: 'center',
                 }}
                 whileHover={{ y: -2, borderColor: 'rgba(26,26,26,.35)' }}
                 whileTap={{ scale: 0.97 }}
               >
                 See full specs
-              </m.button>
+              </m.a>
             </div>
           </m.div>
 

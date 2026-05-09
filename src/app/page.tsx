@@ -3,15 +3,24 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion'
 import Script from 'next/script'
+import dynamic from 'next/dynamic'
 import HeroSafe from '@/components/HeroSafe'
 import PinnedProduct from '@/components/PinnedProduct'
 import ProductDetail from '@/components/ProductDetail'
-import ProductDifferences from '@/components/ProductDifferences'
-import WhoItsFor from '@/components/WhoItsFor'
-import Testimonials from '@/components/Testimonials'
-import Cta from '@/components/Cta'
-import Footer from '@/components/Footer'
 import NavBar from '@/components/NavBar'
+
+// Lazy load below-the-fold components
+const ProductDifferences = dynamic(() => import('@/components/ProductDifferences'), {
+  loading: () => <div style={{ minHeight: '100vh' }} />
+})
+const WhoItsFor = dynamic(() => import('@/components/WhoItsFor'), {
+  loading: () => <div style={{ minHeight: '100vh' }} />
+})
+const Testimonials = dynamic(() => import('@/components/Testimonials'), {
+  loading: () => <div style={{ minHeight: '100vh' }} />
+})
+const Cta = dynamic(() => import('@/components/Cta'))
+const Footer = dynamic(() => import('@/components/Footer'))
 
 export default function Home() {
   const [heroVisible, setHeroVisible] = useState(true)
@@ -61,11 +70,13 @@ export default function Home() {
         id="structured-data-product"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        strategy="afterInteractive"
       />
       <Script
         id="structured-data-organization"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
+        strategy="afterInteractive"
       />
 
       {/* Fixed navbar */}

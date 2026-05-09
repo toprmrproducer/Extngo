@@ -57,6 +57,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Performance optimizations */
+img, video {
+  content-visibility: auto;
+}
+
+/* Optimize animations for performance */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    will-change: auto;
+  }
+}
+
 /* ── Scrollbar ─────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-thumb {
