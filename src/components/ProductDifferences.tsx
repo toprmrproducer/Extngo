@@ -296,6 +296,7 @@ export default function ProductDifferences() {
                       src={product.image!.src}
                       alt={product.image!.alt}
                       fill
+                      sizes="(max-width: 768px) 260px, 260px"
                       style={{ objectFit: 'contain' }}
                     />
                   </div>

@@ -90,10 +90,6 @@ export default function RootLayout({
         <link rel="icon" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
         
-        {/* Preconnect to external domains */}
-        <link rel="preconnect" href="https://www.amazon.com" />
-        <link rel="dns-prefetch" href="https://www.amazon.com" />
-        
         {/* Preload critical assets */}
         <link rel="preload" as="image" href="/product-reel.png" fetchPriority="high" />
       </head>
