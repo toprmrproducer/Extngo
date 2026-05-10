@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque, Geist } from 'next/font/google'
 import './globals.css'
+import ChatbotWidget from '@/components/ChatbotWidget'
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -101,7 +102,10 @@ export default function RootLayout({
           .btn{display:inline-flex;align-items:center;gap:10px;border-radius:8px;font-weight:600;cursor:pointer;border:0;font-family:var(--font-geist)}
         `}} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ChatbotWidget />
+      </body>
     </html>
   )
 }
