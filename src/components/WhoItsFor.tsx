@@ -35,10 +35,10 @@ const HomeOfficeIcon = () => (
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 const CARDS = [
-  { title: 'IT Server Rooms',      badge: 'Enterprise',   stat: '50ft',  sub: 'Rack to rack runs',      bg: '#1C2128', icon: <ServerIcon />,     image: '/It.webp', priority: true },
+  { title: 'On the Go Technical Support',      badge: 'Road Warriors',   stat: '50ft',  sub: 'be ready for any situation',      bg: '#1C2128', icon: <ServerIcon />,     image: '/It.webp', priority: true },
   { title: 'Conference Rooms',     badge: 'AV Install',   stat: '1Gbps', sub: 'Zero trip hazards',      bg: '#1A2E1A', icon: <ConferenceIcon />, image: '/Conference.webp', priority: false },
-  { title: 'Hotel & Hospitality',  badge: 'Facilities',   stat: 'CAT6',  sub: 'Under carpet routing',   bg: '#1A1F2E', icon: <HotelIcon />,      image: '/Hotel.webp', priority: false },
-  { title: 'Trade Shows & Events', badge: 'On the Road',  stat: '33ft',  sub: 'Fast deploy & retract',  bg: '#2A1F14', icon: <EventIcon />,      image: '/Event.webp', priority: false },
+  { title: 'Field Operations',  badge: 'Outdoor & Remote Worksites',   stat: 'CAT6',  sub: 'Built tough. Deploy anywhere',   bg: '#1A1F2E', icon: <HotelIcon />,      image: '/Hotel.webp', priority: false },
+  { title: 'Auto Diagnostic Tools', badge: 'Automotive',  stat: '50ft',  sub: 'Fast, stable wired networking for professional vehicle diagnostics',  bg: '#2A1F14', icon: <EventIcon />,      image: '/Event.webp', priority: false },
   { title: 'Home Office',          badge: 'Remote Work',  stat: 'Flat',  sub: 'Clean desk setups',      bg: '#1E1428', icon: <HomeOfficeIcon />, image: '/house.webp', priority: false },
 ]
 
