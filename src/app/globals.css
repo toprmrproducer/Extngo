@@ -299,6 +299,46 @@ img, video {
   }
 }
 
+/* WhoItsFor carousel — prevent horizontal overflow */
+.wif-carousel-container {
+  overflow-x: hidden !important;
+  max-width: 100%;
+  isolation: isolate;
+}
+
+/* Optimize carousel performance */
+.wif-carousel-track {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+.wif-carousel-card {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+/* Force GPU acceleration for card backgrounds */
+.wif-card-bg {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .wif-carousel-card,
+  .wif-card-bg {
+    transition: none !important;
+  }
+}
+
 /* Testimonials — 2 cols on tablet, 1 on mobile */
 @media (max-width: 860px) {
   .tm-grid-responsive {

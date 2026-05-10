@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { m, LazyMotion, domAnimation, useInView, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState, useMemo, useCallback, memo } from 'react'
+import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { spring } from '@/lib/motion'
 
 // ── Icons ────────────────────────────────────────────────────────────────────
@@ -62,24 +62,34 @@ function useVisibleCount() {
       else setCount(3)
     }
     update()
-    window.addEventListener('resize', update, { passive: true })
-    return () => window.removeEventListener('resize', update)
+    
+    // Debounce resize handler
+    let timeout: ReturnType<typeof setTimeout>
+    const debouncedUpdate = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(update, 150)
+    }
+    
+    window.addEventListener('resize', debouncedUpdate, { passive: true })
+    return () => {
+      window.removeEventListener('resize', debouncedUpdate)
+      clearTimeout(timeout)
+    }
   }, [])
   return count
 }
 
 // ── Arrow button ─────────────────────────────────────────────────────────────
-function ArrowButton({ disabled, onClick, d, label }: { disabled: boolean; onClick: () => void; d: string; label: string }) {
+const ArrowButton = memo(({ disabled, onClick, d, label }: { disabled: boolean; onClick: () => void; d: string; label: string }) => {
   const [hov, setHov] = useState(false)
   const active = !disabled && hov
   return (
-    <m.button
+    <button
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      whileTap={!disabled ? { scale: 0.93 } : {}}
       style={{
         width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
         border: `1.5px solid ${active ? '#1A1A1A' : 'rgba(26,26,26,0.35)'}`,
@@ -87,15 +97,188 @@ function ArrowButton({ disabled, onClick, d, label }: { disabled: boolean; onCli
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         cursor: disabled ? 'default' : 'pointer',
         opacity: disabled ? 0.3 : 1,
-        transition: 'background 0.2s ease, border-color 0.2s ease',
+        transition: 'background 0.15s ease, border-color 0.15s ease, transform 0.1s ease',
+        transform: !disabled && hov ? 'scale(0.93)' : 'scale(1)',
       }}
     >
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={active ? '#ffffff' : '#1A1A1A'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <polyline points={d} />
       </svg>
-    </m.button>
+    </button>
   )
-}
+})
+
+// ── Memoized Card Component ─────────────────────────────────────────────────
+const CarouselCard = memo(({ 
+  card, 
+  index, 
+  isActive, 
+  inWindow, 
+  onClick 
+}: { 
+  card: typeof CARDS[0]; 
+  index: number; 
+  isActive: boolean; 
+  inWindow: boolean; 
+  onClick: () => void;
+}) => {
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  
+  // Preload all images on mount for desktop
+  useEffect(() => {
+    if (card.image && !imageLoaded) {
+      const img = new Image()
+      img.src = card.image
+      img.onload = () => setImageLoaded(true)
+    }
+  }, [card.image, imageLoaded])
+
+  // Calculate width based on state
+  const cardWidth = !inWindow ? '0%' : isActive ? '60%' : '20%'
+
+  return (
+    <div
+      onClick={onClick}
+      role="button"
+      tabIndex={inWindow ? 0 : -1}
+      aria-label={card.title}
+      onKeyDown={e => e.key === 'Enter' && inWindow && onClick()}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="wif-carousel-card"
+      style={{
+        width: cardWidth,
+        opacity: inWindow ? 1 : 0,
+        borderRadius: 16,
+        position: 'relative',
+        overflow: 'hidden',
+        cursor: inWindow ? 'pointer' : 'default',
+        height: '100%',
+        background: card.bg,
+        pointerEvents: inWindow ? 'auto' : 'none',
+        flexShrink: 0,
+        transition: 'width 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, transform 0.2s ease',
+        transform: isHovered && inWindow ? 'translateY(-4px)' : 'translateY(0)',
+        boxShadow: isHovered && inWindow ? '0 20px 48px rgba(0,0,0,0.22)' : '0 4px 12px rgba(0,0,0,0.08)',
+        willChange: 'width, transform',
+      }}
+    >
+      {/* Background Image */}
+      {card.image && imageLoaded && (
+        <div
+          className="wif-card-bg"
+          style={{
+            position: 'absolute', 
+            inset: 0,
+            backgroundImage: `url(${card.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            transform: isActive ? 'scale(1.05)' : 'scale(1)',
+            transition: 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
+            willChange: 'transform',
+          }}
+        />
+      )}
+      
+      {/* Gradient Overlay */}
+      {card.image && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.65) 100%)',
+          zIndex: 1,
+        }} />
+      )}
+      
+      {/* Icon (no image) */}
+      {!card.image && (
+        <div
+          style={{
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%',
+            transform: `translate(-50%, -50%) scale(${isActive ? 1.8 : 1})`,
+            opacity: 0.15, 
+            color: '#fff', 
+            pointerEvents: 'none',
+            transition: 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
+          {card.icon}
+        </div>
+      )}
+      
+      {/* Badge */}
+      <div style={{
+        position: 'absolute', top: 14, left: 14, zIndex: 2,
+        padding: '4px 10px', borderRadius: 999,
+        background: 'rgba(255,255,255,0.15)',
+        border: '1px solid rgba(255,255,255,0.25)',
+        color: '#fff', fontSize: 10, fontWeight: 600,
+        letterSpacing: '1.2px', textTransform: 'uppercase',
+        backdropFilter: 'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
+      }}>
+        {card.badge}
+      </div>
+      
+      {/* Stat */}
+      <div
+        style={{
+          position: 'absolute', 
+          top: 12, 
+          right: 14, 
+          zIndex: 2,
+          fontFamily: 'var(--font-bricolage)',
+          color: 'rgba(255,255,255,0.9)', 
+          lineHeight: 1, 
+          fontWeight: 800,
+          fontSize: isActive ? 'clamp(20px,3vw,36px)' : 'clamp(13px,2vw,20px)',
+          transition: 'font-size 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+      >
+        {card.stat}
+      </div>
+      
+      {/* Content */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2,
+        padding: '56px 18px 20px',
+        background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 100%)',
+      }}>
+        <p style={{ 
+          fontSize: 15, 
+          fontWeight: 700, 
+          color: '#fff', 
+          margin: '0 0 4px', 
+          lineHeight: 1.25,
+          opacity: isActive ? 1 : 0.8,
+          transition: 'opacity 0.3s ease',
+        }}>
+          {card.title}
+        </p>
+        <p style={{ 
+          fontSize: 12, 
+          color: 'rgba(255,255,255,0.6)', 
+          margin: 0,
+          opacity: isActive ? 1 : 0,
+          transition: 'opacity 0.3s ease',
+          maxHeight: isActive ? '100px' : '0',
+          overflow: 'hidden',
+        }}>
+          {card.sub}
+        </p>
+      </div>
+    </div>
+  )
+}, (prevProps, nextProps) => {
+  // Custom comparison for better memoization
+  return (
+    prevProps.isActive === nextProps.isActive &&
+    prevProps.inWindow === nextProps.inWindow &&
+    prevProps.index === nextProps.index
+  )
+})
 
 export default function WhoItsFor() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -108,18 +291,21 @@ export default function WhoItsFor() {
   // Drag state for swipe gesture
   const dragStartX = useRef(0)
 
-  const startTimer = () => {
+  const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current)
     timerRef.current = setInterval(() => {
-      setActive(a => (a + 1) % CARDS.length)
-    }, 3200)
-  }
+      // Use requestAnimationFrame for smoother state updates
+      requestAnimationFrame(() => {
+        setActive(a => (a + 1) % CARDS.length)
+      })
+    }, 3500) // Slightly longer interval for smoother experience
+  }, [])
 
   useEffect(() => {
     if (inView && !hovered) startTimer()
     else if (timerRef.current) clearInterval(timerRef.current)
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
-  }, [inView, hovered])
+  }, [inView, hovered, startTimer])
 
   // Pause on tab hidden
   useEffect(() => {
@@ -129,12 +315,28 @@ export default function WhoItsFor() {
     }
     document.addEventListener('visibilitychange', onVis)
     return () => document.removeEventListener('visibilitychange', onVis)
-  }, [inView, hovered])
+  }, [inView, hovered, startTimer])
 
-  const prev = () => { setActive(a => Math.max(0, a - 1)); startTimer() }
-  const next = () => { setActive(a => Math.min(CARDS.length - 1, a + 1)); startTimer() }
+  const prev = useCallback(() => { 
+    setActive(a => {
+      const newVal = Math.max(0, a - 1)
+      return newVal
+    })
+    startTimer() 
+  }, [startTimer])
+  
+  const next = useCallback(() => { 
+    setActive(a => {
+      const newVal = Math.min(CARDS.length - 1, a + 1)
+      return newVal
+    })
+    startTimer() 
+  }, [startTimer])
 
-  const windowStart = Math.min(Math.max(0, active - Math.floor(visibleCount / 2)), CARDS.length - visibleCount)
+  const windowStart = useMemo(() => 
+    Math.min(Math.max(0, active - Math.floor(visibleCount / 2)), CARDS.length - visibleCount),
+    [active, visibleCount]
+  )
   const windowEnd = windowStart + visibleCount - 1
 
   return (
@@ -245,7 +447,13 @@ export default function WhoItsFor() {
           >
             {/* Card track */}
             <div
-              style={{ overflow: 'hidden', position: 'relative', width: '100%', height: 'clamp(340px,58vh,520px)' }}
+              className="wif-carousel-container"
+              style={{ 
+                overflow: 'hidden', 
+                position: 'relative', 
+                width: '100%', 
+                height: 'clamp(340px,58vh,520px)',
+              }}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
               onTouchStart={e => { dragStartX.current = e.touches[0].clientX }}
@@ -255,101 +463,33 @@ export default function WhoItsFor() {
                 else if (dx > 50) prev()
               }}
             >
-              <div style={{ display: 'flex', gap: CARD_GAP, width: '100%', height: '100%' }}>
+              <div 
+                className="wif-carousel-track"
+                style={{ 
+                  display: 'flex', 
+                  gap: CARD_GAP, 
+                  width: '100%', 
+                  height: '100%',
+                  overflow: 'hidden',
+                }}
+              >
                 {CARDS.map((card, i) => {
                   const isActive = i === active
                   const inWindow = i >= windowStart && i <= windowEnd
                   return (
-                    <m.div
-                      key={i}
-                      onClick={() => { if (inWindow) { setActive(i); startTimer() } }}
-                      role="button"
-                      tabIndex={inWindow ? 0 : -1}
-                      aria-label={card.title}
-                      onKeyDown={e => e.key === 'Enter' && inWindow && setActive(i)}
-                      animate={{
-                        flex: !inWindow ? 0 : isActive ? 3 : 1,
-                        opacity: inWindow ? 1 : 0,
-                        fontSize: isActive ? 'clamp(20px,3vw,36px)' : 'clamp(13px,2vw,20px)',
+                    <CarouselCard
+                      key={card.title}
+                      card={card}
+                      index={i}
+                      isActive={isActive}
+                      inWindow={inWindow}
+                      onClick={() => { 
+                        if (inWindow) { 
+                          setActive(i)
+                          startTimer() 
+                        } 
                       }}
-                      transition={spring.gentle}
-                      style={{
-                        borderRadius: 16,
-                        position: 'relative',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        minWidth: 0,
-                        height: '100%',
-                        background: card.bg,
-                        pointerEvents: inWindow ? 'auto' : 'none',
-                        willChange: 'flex, opacity',
-                      }}
-                      whileHover={inWindow ? { y: -4, boxShadow: '0 20px 48px rgba(0,0,0,0.22)' } : {}}
-                    >
-                      {card.image && (
-                        <m.div
-                          animate={{ scale: isActive ? 1.04 : 1 }}
-                          transition={spring.gentle}
-                          style={{
-                            position: 'absolute', inset: 0,
-                            backgroundImage: `url(${card.image})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            willChange: 'transform',
-                          }}
-                        />
-                      )}
-                      {card.image && (
-                        <div style={{
-                          position: 'absolute', inset: 0,
-                          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.65) 100%)',
-                          zIndex: 1,
-                        }} />
-                      )}
-                      {!card.image && (
-                        <m.div
-                          animate={{ scale: isActive ? 1.8 : 1 }}
-                          transition={spring.gentle}
-                          style={{
-                            position: 'absolute', top: '50%', left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            opacity: 0.15, color: '#fff', pointerEvents: 'none',
-                          }}
-                        >
-                          {card.icon}
-                        </m.div>
-                      )}
-                      <div style={{
-                        position: 'absolute', top: 14, left: 14, zIndex: 2,
-                        padding: '4px 10px', borderRadius: 999,
-                        background: 'rgba(255,255,255,0.15)',
-                        border: '1px solid rgba(255,255,255,0.25)',
-                        color: '#fff', fontSize: 10, fontWeight: 600,
-                        letterSpacing: '1.2px', textTransform: 'uppercase',
-                        backdropFilter: 'blur(6px)',
-                      }}>
-                        {card.badge}
-                      </div>
-                      <m.div
-                        animate={{ fontSize: isActive ? 'clamp(20px,3vw,36px)' : 'clamp(13px,2vw,20px)' }}
-                        transition={spring.gentle}
-                        style={{
-                          position: 'absolute', top: 12, right: 14, zIndex: 2,
-                          fontFamily: 'var(--font-bricolage)',
-                          color: 'rgba(255,255,255,0.9)', lineHeight: 1, fontWeight: 800,
-                        }}
-                      >
-                        {card.stat}
-                      </m.div>
-                      <div style={{
-                        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2,
-                        padding: '56px 18px 20px',
-                        background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 100%)',
-                      }}>
-                        <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: '0 0 4px', lineHeight: 1.25 }}>{card.title}</p>
-                        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', margin: 0 }}>{card.sub}</p>
-                      </div>
-                    </m.div>
+                    />
                   )
                 })}
               </div>
@@ -360,12 +500,20 @@ export default function WhoItsFor() {
               {/* Dots */}
               <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                 {CARDS.map((_, i) => (
-                  <m.button
+                  <button
                     key={i}
                     onClick={() => { setActive(i); startTimer() }}
-                    animate={{ width: i === active ? 20 : 6, background: i === active ? '#1A1A1A' : '#bbb' }}
-                    transition={{ duration: 0.3 }}
-                    style={{ height: 6, borderRadius: 999, border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}
+                    style={{ 
+                      width: i === active ? 20 : 6,
+                      height: 6, 
+                      borderRadius: 999, 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      padding: 0, 
+                      flexShrink: 0,
+                      background: i === active ? '#1A1A1A' : '#bbb',
+                      transition: 'width 0.3s ease, background 0.3s ease',
+                    }}
                     aria-label={`Go to card ${i + 1}`}
                   />
                 ))}
