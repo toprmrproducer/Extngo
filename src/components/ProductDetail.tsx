@@ -149,6 +149,7 @@ export default function ProductDetail() {
               filter: 'drop-shadow(0 40px 60px rgba(60,40,20,.3)) drop-shadow(0 15px 25px rgba(60,40,20,.18))',
             }}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/product-reel.png"
               alt="Extngo 50ft retractable CAT6 cable reel"

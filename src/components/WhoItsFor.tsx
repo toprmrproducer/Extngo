@@ -80,7 +80,7 @@ function useVisibleCount() {
 }
 
 // ── Arrow button ─────────────────────────────────────────────────────────────
-const ArrowButton = memo(({ disabled, onClick, d, label }: { disabled: boolean; onClick: () => void; d: string; label: string }) => {
+const ArrowButton = memo(function ArrowButton({ disabled, onClick, d, label }: { disabled: boolean; onClick: () => void; d: string; label: string }) {
   const [hov, setHov] = useState(false)
   const active = !disabled && hov
   return (
@@ -109,7 +109,7 @@ const ArrowButton = memo(({ disabled, onClick, d, label }: { disabled: boolean; 
 })
 
 // ── Memoized Card Component ─────────────────────────────────────────────────
-const CarouselCard = memo(({ 
+const CarouselCard = memo(function CarouselCard({ 
   card, 
   index, 
   isActive, 
@@ -121,7 +121,7 @@ const CarouselCard = memo(({
   isActive: boolean; 
   inWindow: boolean; 
   onClick: () => void;
-}) => {
+}) {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   
