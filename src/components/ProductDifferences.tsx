@@ -22,7 +22,8 @@ type Product = {
   shadow: string
   specs: ProductSpec[]
   price: string
-  buyKey: BuyKey
+  buyKey?: BuyKey
+  comingSoon?: true
   pageHref?: string
   accentRgb: string
   accentColor: string
@@ -51,7 +52,7 @@ const PRODUCTS: Product[] = [
       ['Drivers', 'Plug & Play'],
     ],
     price: '$70.02',
-    buyKey: 'cableBlue' as const,
+    comingSoon: true as const,
     pageHref: '/products/blue',
     accentRgb: '33,150,243',
     accentColor: '#2196F3',
@@ -348,43 +349,69 @@ export default function ProductDifferences() {
                   <span style={{ fontSize: 24, fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.5px' }}>
                     {product.price}
                   </span>
-                  <span style={{ fontSize: 12, color: '#8A8A8A', marginLeft: 6, fontWeight: 500 }}>on Shopify</span>
+                  {!product.comingSoon && (
+                    <span style={{ fontSize: 12, color: '#8A8A8A', marginLeft: 6, fontWeight: 500 }}>on Shopify</span>
+                  )}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => buyShopify(product.buyKey)}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 7,
-                    padding: '10px 20px', borderRadius: 999,
-                    background: `rgba(${product.accentRgb},0.06)`,
-                    border: `1px solid rgba(${product.accentRgb},0.2)`,
-                    color: product.badge.color,
-                    fontSize: 13, fontWeight: 600,
-                    cursor: 'pointer',
-                    letterSpacing: '0.3px',
-                    transition: 'background 0.2s, border-color 0.2s',
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLButtonElement
-                    el.style.background = `rgba(${product.accentRgb},0.13)`
-                    el.style.borderColor = `rgba(${product.accentRgb},0.42)`
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLButtonElement
-                    el.style.background = `rgba(${product.accentRgb},0.06)`
-                    el.style.borderColor = `rgba(${product.accentRgb},0.2)`
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                    <path d="M3 6h18" />
-                    <path d="M16 10a4 4 0 0 1-8 0" />
-                  </svg>
-                  Buy Now
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M7 17 17 7" /><path d="M7 7h10v10" />
-                  </svg>
-                </button>
+                {product.comingSoon ? (
+                  <button
+                    type="button"
+                    disabled
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 7,
+                      padding: '10px 20px', borderRadius: 999,
+                      background: `rgba(${product.accentRgb},0.06)`,
+                      border: `1px dashed rgba(${product.accentRgb},0.35)`,
+                      color: product.badge.color,
+                      fontSize: 13, fontWeight: 600,
+                      cursor: 'not-allowed',
+                      letterSpacing: '0.3px',
+                      opacity: 0.85,
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 6v6l4 2" />
+                    </svg>
+                    Coming Soon
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => product.buyKey && buyShopify(product.buyKey)}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 7,
+                      padding: '10px 20px', borderRadius: 999,
+                      background: `rgba(${product.accentRgb},0.06)`,
+                      border: `1px solid rgba(${product.accentRgb},0.2)`,
+                      color: product.badge.color,
+                      fontSize: 13, fontWeight: 600,
+                      cursor: 'pointer',
+                      letterSpacing: '0.3px',
+                      transition: 'background 0.2s, border-color 0.2s',
+                    }}
+                    onMouseEnter={e => {
+                      const el = e.currentTarget as HTMLButtonElement
+                      el.style.background = `rgba(${product.accentRgb},0.13)`
+                      el.style.borderColor = `rgba(${product.accentRgb},0.42)`
+                    }}
+                    onMouseLeave={e => {
+                      const el = e.currentTarget as HTMLButtonElement
+                      el.style.background = `rgba(${product.accentRgb},0.06)`
+                      el.style.borderColor = `rgba(${product.accentRgb},0.2)`
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                      <path d="M3 6h18" />
+                      <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                    Buy Now
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 17 17 7" /><path d="M7 7h10v10" />
+                    </svg>
+                  </button>
+                )}
               </div>
             </m.div>
           ))}

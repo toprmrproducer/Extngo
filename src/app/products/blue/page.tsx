@@ -8,10 +8,7 @@ import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
 
-import { buyShopify } from '@/lib/shopify-buy'
-
-// Blue Edition has no Shopify SKU yet, buyShopify('cableBlue') falls back to /shop.
-const BUY_KEY = 'cableBlue' as const
+// Blue Edition is not on sale yet. CTAs render as disabled "Coming Soon" buttons.
 const LAUNCH_DATE = new Date('2026-04-26T00:00:00')
 
 // ── Countdown ────────────────────────────────────────────────────────────────
@@ -300,21 +297,23 @@ export default function BluePage() {
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <button
                 type="button"
-                onClick={() => buyShopify(BUY_KEY)}
+                disabled
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 9,
                   padding: '14px 28px', borderRadius: 999,
-                  background: '#2196F3', color: '#fff', border: 0,
-                  fontWeight: 700, fontSize: 15, cursor: 'pointer',
-                  boxShadow: '0 10px 32px rgba(33,150,243,0.45)',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  background: 'rgba(33,150,243,0.18)',
+                  color: '#fff',
+                  border: '1px dashed rgba(33,150,243,0.55)',
+                  fontWeight: 700, fontSize: 15, cursor: 'not-allowed',
                   fontFamily: 'inherit',
+                  opacity: 0.95,
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
                 </svg>
-                Buy Now
+                Coming Soon
               </button>
               <Link
                 href="/"
@@ -730,24 +729,27 @@ export default function BluePage() {
 
             <button
               type="button"
-              onClick={() => buyShopify(BUY_KEY)}
+              disabled
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 9,
                 padding: '16px 34px', borderRadius: 999,
-                background: '#2196F3', color: '#fff', border: 0,
-                fontWeight: 700, fontSize: 16, cursor: 'pointer',
-                boxShadow: '0 12px 40px rgba(33,150,243,0.45)',
+                background: 'rgba(33,150,243,0.18)',
+                color: '#fff',
+                border: '1px dashed rgba(33,150,243,0.55)',
+                fontWeight: 700, fontSize: 16, cursor: 'not-allowed',
                 fontFamily: 'inherit',
+                opacity: 0.95,
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
               </svg>
-              Buy Now
+              Coming Soon
             </button>
 
             <p style={{ marginTop: 16, fontSize: 12.5, color: 'rgba(255,255,255,0.3)' }}>
-              Buy on Shopify · Fast shipping · Reliable support
+              Drop by /shop for the 50ft and 33ft cables available today.
             </p>
           </FadeSection>
         </section>

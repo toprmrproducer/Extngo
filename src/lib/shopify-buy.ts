@@ -6,9 +6,9 @@
 // programmatically click that hidden button, so the event target is inside a
 // product context and the cart knows which product to add. No redirect required.
 
-export type BuyKey = 'cable50ft' | 'cable33ft' | 'cableBlue'
+export type BuyKey = 'cable50ft' | 'cable33ft'
 
-export const PRODUCT_HANDLES: Record<Exclude<BuyKey, 'cableBlue'>, string> = {
+export const PRODUCT_HANDLES: Record<BuyKey, string> = {
   cable50ft:
     'extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender',
   cable33ft:
@@ -17,16 +17,11 @@ export const PRODUCT_HANDLES: Record<Exclude<BuyKey, 'cableBlue'>, string> = {
 
 export function buyShopify(key: BuyKey): void {
   if (typeof window === 'undefined') return
-  // Blue Edition has no Shopify SKU yet, fall back to the /shop page.
-  if (key === 'cableBlue') {
-    window.location.href = '/shop'
-    return
-  }
   const trigger = document.querySelector<HTMLButtonElement>(
     `[data-shopify-buy="${key}"]`,
   )
   if (!trigger) {
-    // Web components script may still be loading. Open /shop as a graceful fallback.
+    // Web components script may still be loading, gracefully bail to /shop.
     window.location.href = '/shop'
     return
   }
