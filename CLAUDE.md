@@ -1,0 +1,112 @@
+# Extngo — Project CLAUDE.md
+
+> Read this file FIRST before touching code. Update it any time you change folder structure, add a component, or change deployment.
+
+## What this is
+
+Next.js 15 (App Router) marketing site + Shopify-backed storefront for **EXTNGO**, the retractable flat CAT6 ethernet cable reel. Brand color is orange `#E8431A` (`var(--accent)`). Fonts are Bricolage Grotesque (`--font-bricolage`, display) and Geist (`--font-geist`, body).
+
+- Live (Vercel): https://extngo-eight.vercel.app
+- GitHub: https://github.com/Abhinav-Chauhan1/Extngo
+- Shopify store: https://extngo.myshopify.com (admin: `admin.shopify.com/store/extngo`)
+- Custom domain: https://extngo.com
+
+## Local path
+
+Project root: `~/iCloud/website/extango/` (real path: `~/Library/Mobile Documents/com~apple~CloudDocs/website/extango/`). Per the iCloud rule, `node_modules` and `.next` are symlinks to `.nosync` siblings so iCloud doesn't sync them. After `git pull` on a new machine, run `npm install` to regenerate the `.nosync` folders.
+
+## Stack
+
+- Next.js 15.1 (App Router, RSC + selective `'use client'`)
+- React 18.3
+- TypeScript 5.6
+- Tailwind 4 + custom CSS via `globals.css`
+- `framer-motion` 12 (lazy-loaded via `LazyMotion`)
+- `next/image` for optimized images
+- Shopify Storefront Web Components (CDN script, no npm)
+
+## Folder structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx              # Root layout — fonts, Shopify script, ShopifyRoot, ChatbotWidget
+│   ├── page.tsx                # Landing page — Hero, ProductDetail, WhoItsFor, Testimonials, Cta, Footer
+│   ├── globals.css             # Global styles + CSS vars (--accent, --ink, etc.)
+│   ├── sitemap.ts
+│   ├── shop/                   # NEW — Shopify-backed storefront
+│   │   ├── page.tsx            # /shop server component (metadata + layout)
+│   │   └── ShopifyStorefront.tsx  # 'use client' — product cards, collection grid, modal
+│   └── blog/                   # Blog list + article pages
+├── components/
+│   ├── NavBar.tsx              # Fixed nav; LINKS array includes /shop
+│   ├── HeroStatic.tsx + HeroInteractive.tsx  # Split-paint hero for LCP
+│   ├── ProductDetail.tsx       # Hero product callout
+│   ├── ProductDifferences.tsx
+│   ├── PinnedProduct.tsx
+│   ├── WhoItsFor.tsx, Testimonials.tsx, Cta.tsx, Footer.tsx
+│   ├── ChatbotWidget.tsx
+│   ├── B2BContactModal.tsx
+│   ├── shopify/
+│   │   └── ShopifyRoot.tsx     # Mounts global <shopify-store> + <shopify-cart>
+│   └── blog/                   # Blog UI primitives
+├── lib/
+│   └── motion.ts               # Shared framer-motion variants
+└── types/
+    └── shopify.d.ts            # JSX declarations for <shopify-*> custom elements
+```
+
+## Shopify integration
+
+The Shopify Storefront Web Components live at `https://cdn.shopify.com/storefront/web-components.js`. Loaded via `next/script` (strategy `afterInteractive`) in `app/layout.tsx`. Once loaded, every `<shopify-*>` custom element registers and hydrates on its own.
+
+### Global mount — `components/shopify/ShopifyRoot.tsx`
+- Mounts `<shopify-store store-domain="extngo.myshopify.com" public-access-token="..." country="US" language="en" />` once for the whole app — provides the store context.
+- Mounts `<shopify-cart id="main-cart" />` — single cart shared by every page. Any "add to cart" anywhere calls `document.getElementById('main-cart').addLine(event).showModal()`.
+- Carries brand styling via CSS parts: primary button uses `#E8431A` pill, secondary button is outlined.
+
+### Shop page — `app/shop/`
+- `page.tsx` is a server component: page header + `<NavBar />` + `<ShopifyStorefront />` + `<Footer />`.
+- `ShopifyStorefront.tsx` is a client component. Templates inside `<shopify-context>` are passed via `dangerouslySetInnerHTML` on `<template>` — required because Shopify's web components parse the template HTML at runtime, and React would otherwise interpret it as React children.
+- Two product hero cards (50ft + 33ft handles), then a `frontpage` collection grid, then a quick-view `<dialog>` keyed off `id="product-modal"`.
+- Buttons inline `onclick` to call `document.getElementById('main-cart').addLine(event).showModal()` (cart) or `document.querySelector('shopify-store').buyNow(event)` (checkout).
+
+### Real product handles (live data, queried via Storefront API)
+- 50ft / 15m — `extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender` — $79.99 USD
+- 33ft / 10m — `retractable-network-cable-extender-33-feet-10-meter-cat-6-ethernet-cable-flat-portable-1-gbps-data-speed-swiftly-setup-temp-networks-cascadable-male-female-rj45-connector-utp-cable-reel` — $69.99 USD
+- Collection: `frontpage` (the only collection currently in the store)
+
+### Tokens
+- Public access token: hard-coded in `src/components/shopify/ShopifyRoot.tsx`. This is a Shopify Storefront API public access token — designed to be exposed client-side. Rotate in Shopify admin → Headless channel → Storefront API.
+- Private access token (server-side only): **NOT in repo.** Get from Shopify admin → Headless channel → Storefront API → "Private access token". Store in `.env.local` as `SHOPIFY_PRIVATE_ACCESS_TOKEN=...`. Never commit.
+
+### TypeScript
+`src/types/shopify.d.ts` declares JSX intrinsics for every Shopify custom element. Keep it in sync if you start using more components (e.g. `shopify-search-context`).
+
+## Patterns to follow
+
+- Match the brand: orange `#E8431A` + ink `#1A1A1A` + Bricolage display + Geist body. Pills are `border-radius: 999px`. Drop shadows on primary CTAs use `rgba(232,67,26,.28-.4)`.
+- Heavy components (anything below the fold) are lazy-loaded via `next/dynamic`. Keep that pattern.
+- Animations use the shared variants in `lib/motion.ts`; don't reinvent.
+- For new Shopify product surfaces, follow the `ShopifyStorefront.tsx` pattern: template HTML in `dangerouslySetInnerHTML`, client onclick to the global `main-cart`.
+
+## Dev / build / deploy
+
+```bash
+npm install            # creates node_modules; then mv node_modules node_modules.nosync && ln -s node_modules.nosync node_modules
+npm run dev            # localhost:3000
+npm run build && npm start
+```
+
+Deploy via Vercel — push to `main` and Vercel auto-builds. The Vercel project must keep its GitHub repo (Abhinav-Chauhan1/Extngo) wired — never leave it disconnected.
+
+## Routes
+
+- `/` — landing
+- `/shop` — Shopify storefront (added 4 Jun 2026)
+- `/blog`, `/blog/[slug]` — blog
+- `/sitemap.xml` — generated from `src/app/sitemap.ts`
+
+## Recent changes
+
+- **4 Jun 2026** — Project relocated to `~/iCloud/website/extango/` (was `~/Desktop/extango/Extngo/`). Added Shopify Storefront Web Components: global store/cart in `ShopifyRoot`, new `/shop` page with both real products + frontpage collection + quick-view modal. NavBar gained a "Shop" link. CLAUDE.md written.

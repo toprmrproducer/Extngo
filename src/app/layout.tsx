@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque, Geist } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import ChatbotWidget from '@/components/ChatbotWidget'
+import ShopifyRoot from '@/components/shopify/ShopifyRoot'
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -94,7 +96,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
-        
+
         {/* Critical CSS for instant hero render */}
         <style dangerouslySetInnerHTML={{ __html: `
           .font-display{font-family:var(--font-bricolage);letter-spacing:-0.02em}
@@ -103,6 +105,14 @@ export default function RootLayout({
         `}} />
       </head>
       <body>
+        {/* Shopify Storefront Web Components — registers <shopify-*> custom elements */}
+        <Script
+          src="https://cdn.shopify.com/storefront/web-components.js"
+          type="module"
+          strategy="afterInteractive"
+        />
+        {/* Global store context + cart; available to every page */}
+        <ShopifyRoot />
         {children}
         <ChatbotWidget />
       </body>

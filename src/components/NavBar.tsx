@@ -10,6 +10,7 @@ import B2BContactModal from './B2BContactModal'
 
 const LINKS = [
   { label: 'Home',     href: '/',                  hash: false },
+  { label: 'Shop',     href: '/shop',              hash: false },
   { label: 'Products', href: '/#product-differences', hash: true  },
   { label: 'Reviews',  href: '/#reviews',           hash: true  },
   { label: 'About',    href: '/#use-cases',          hash: true  },
@@ -26,6 +27,7 @@ export default function NavBar({ delayBase = 0.05 }: { delayBase?: number }) {
   // Determine active link based on current pathname
   const getActive = (href: string) => {
     if (href === '/blog') return pathname.startsWith('/blog')
+    if (href === '/shop') return pathname.startsWith('/shop')
     if (href === '/') return pathname === '/'
     return false
   }
