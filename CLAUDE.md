@@ -127,7 +127,9 @@ HeroStatic, HeroSafe (Hero variants), ProductDetail, ProductDifferences (3 cards
 
 ## Gotchas
 
-- `<body>` carries `suppressHydrationWarning` in `app/layout.tsx`. Don't remove it — browser extensions (Brave especially) inject a `style` attribute on body and cause a React hydration warning otherwise. If you ever need to debug a real body-level mismatch, temporarily remove the prop, reproduce, and restore.
+- `<body>` carries `suppressHydrationWarning` in `app/layout.tsx`. Don't remove it. Browser extensions (Brave especially) inject a `style` attribute on body and cause a React hydration warning otherwise. If you ever need to debug a real body-level mismatch, temporarily remove the prop, reproduce, and restore.
+- **Stale browser chunk after a dev restart**: this project lives in iCloud Drive. After a Next dev restart, the browser's disk cache can keep serving the previous `_next/static/chunks/app/page.js` even though the dev server has a fresh one. Symptom: SSR HTML is correct but client renders the old tree and React fires a hydration warning. Fix: hard refresh (Cmd+Shift+R in Brave) or in Playwright `await page.evaluate('() => location.reload()')` after re-navigating. Confirm with `fetch('/_next/static/chunks/app/page.js', { cache: 'reload' })` then `.text()` to see if your latest string is in the chunk.
+- **Blue Edition is not for sale yet**. CTAs across `ProductDifferences` (Blue card) and `/products/blue` are disabled "Coming Soon" buttons. When Blue ships on Shopify, add the handle to `PRODUCT_HANDLES` in `src/lib/shopify-buy.ts`, mount its `<shopify-context>` trigger in `ShopifyRoot`, restore `buyKey: 'cableBlue'` on the Blue product entry in `ProductDifferences`, and swap the disabled buttons on `/products/blue` back to `<button onClick={() => buyShopify('cableBlue')}>`. Remove the `comingSoon` flag.
 
 ## Recent changes
 
