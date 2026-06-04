@@ -415,9 +415,7 @@ export default function WhoItsFor() {
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
               <m.a
-                href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
                 className="btn btn-primary"
                 style={{ fontSize: 14, padding: '13px 28px', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
@@ -538,9 +536,7 @@ export default function WhoItsFor() {
               style={{ display: 'none', gap: 12, flexWrap: 'wrap', marginTop: 20 }}
             >
               <m.a
-                href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
                 className="btn btn-primary"
                 style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}

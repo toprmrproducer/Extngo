@@ -8,7 +8,8 @@ import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
 
-const AMAZON_BLUE = 'https://www.amazon.com/dp/B0GJD6W12Y'
+// Blue Edition has no Shopify SKU yet — Buy CTAs route to the Shopify-powered /shop page.
+const BUY_LINK = '/shop'
 const LAUNCH_DATE = new Date('2026-04-26T00:00:00')
 
 // ── Countdown ────────────────────────────────────────────────────────────────
@@ -191,12 +192,12 @@ export default function BluePage() {
     },
     offers: {
       '@type': 'Offer',
-      url: AMAZON_BLUE,
+      url: BUY_LINK,
       priceCurrency: 'USD',
       availability: launched ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
       seller: {
         '@type': 'Organization',
-        name: 'Amazon',
+        name: 'EXTNGO',
       },
     },
     additionalProperty: [
@@ -295,10 +296,8 @@ export default function BluePage() {
             )}
 
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a
-                href={AMAZON_BLUE}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={BUY_LINK}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 9,
                   padding: '14px 28px', borderRadius: 999,
@@ -311,8 +310,8 @@ export default function BluePage() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
                 </svg>
-                View on Amazon
-              </a>
+                Buy Now
+              </Link>
               <Link
                 href="/"
                 style={{
@@ -725,10 +724,8 @@ export default function BluePage() {
               ))}
             </div>
 
-            <a
-              href={AMAZON_BLUE}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={BUY_LINK}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 9,
                 padding: '16px 34px', borderRadius: 999,
@@ -740,11 +737,11 @@ export default function BluePage() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
               </svg>
-              Get Wired Anywhere — Amazon
-            </a>
+              Buy Now
+            </Link>
 
             <p style={{ marginTop: 16, fontSize: 12.5, color: 'rgba(255,255,255,0.3)' }}>
-              Available now on Amazon · Fast shipping · Reliable support
+              Buy on Shopify · Fast shipping · Reliable support
             </p>
           </FadeSection>
         </section>

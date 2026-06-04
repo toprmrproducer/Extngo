@@ -107,6 +107,10 @@ Deploy via Vercel — push to `main` and Vercel auto-builds. The Vercel project 
 - `/blog`, `/blog/[slug]` — blog
 - `/sitemap.xml` — generated from `src/app/sitemap.ts`
 
+## Gotchas
+
+- `<body>` carries `suppressHydrationWarning` in `app/layout.tsx`. Don't remove it — browser extensions (Brave especially) inject a `style` attribute on body and cause a React hydration warning otherwise. If you ever need to debug a real body-level mismatch, temporarily remove the prop, reproduce, and restore.
+
 ## Recent changes
 
 - **4 Jun 2026** — Project relocated to `~/iCloud/website/extango/` (was `~/Desktop/extango/Extngo/`). Added Shopify Storefront Web Components: global store/cart in `ShopifyRoot`, new `/shop` page with both real products + frontpage collection + quick-view modal. NavBar gained a "Shop" link. CLAUDE.md written.

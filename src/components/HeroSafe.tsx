@@ -132,9 +132,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(10px,2vw,14px)', marginTop: 'clamp(24px,4vh,36px)' }}
               >
                 <m.a
-                  href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
                   className="btn btn-primary"
                   style={{
                     background: 'var(--accent)', color: '#FFFFFF', border: 'none',
@@ -149,7 +147,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
                   </svg>
-                  Shop on Amazon
+                  Buy Now
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                   </svg>

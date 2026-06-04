@@ -5,14 +5,15 @@ import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
 
-const AMAZON_ORANGE = 'https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1'
+const SHOPIFY_50FT = 'https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender'
+const SHOPIFY_33FT = 'https://extngo.com/products/retractable-network-cable-extender-33-feet-10-meter-cat-6-ethernet-cable-flat-portable-1-gbps-data-speed-swiftly-setup-temp-networks-cascadable-male-female-rj45-connector-utp-cable-reel'
 
 const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: 'Product',
     links: [
-      { label: 'Extngo Orange (50ft)', href: AMAZON_ORANGE },
-      { label: 'Extngo Green (33ft)', href: 'https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LW2YNJ4?ref_=ast_sto_dp&th=1' },
+      { label: 'Extngo Orange (50ft)', href: SHOPIFY_50FT },
+      { label: 'Extngo Green (33ft)', href: SHOPIFY_33FT },
       { label: 'Specs & Compare', href: '#' },
       { label: 'B2B Inquiry', href: '#' },
       { label: 'Bulk Orders', href: '#' },

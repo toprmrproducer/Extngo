@@ -50,7 +50,7 @@ const PRODUCTS: Product[] = [
       ['Drivers', 'Plug & Play'],
     ],
     price: '$70.02',
-    href: 'https://www.amazon.com/dp/B0GJD6W12Y',
+    href: '/shop',
     pageHref: '/products/blue',
     accentRgb: '33,150,243',
     accentColor: '#2196F3',
@@ -76,7 +76,7 @@ const PRODUCTS: Product[] = [
       ['Drivers', 'Plug & Play'],
     ],
     price: '$79.99',
-    href: 'https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1',
+    href: 'https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender',
     accentRgb: '232,67,26',
     accentColor: '#E8431A',
     popular: true,
@@ -102,7 +102,7 @@ const PRODUCTS: Product[] = [
       ['Drivers', 'Plug & Play'],
     ],
     price: '$69.99',
-    href: 'https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LW2YNJ4?ref_=ast_sto_dp&th=1',
+    href: 'https://extngo.com/products/retractable-network-cable-extender-33-feet-10-meter-cat-6-ethernet-cable-flat-portable-1-gbps-data-speed-swiftly-setup-temp-networks-cascadable-male-female-rj45-connector-utp-cable-reel',
     accentRgb: '76,175,80',
     accentColor: '#4CAF50',
   },
@@ -347,11 +347,10 @@ export default function ProductDifferences() {
                   <span style={{ fontSize: 24, fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.5px' }}>
                     {product.price}
                   </span>
-                  <span style={{ fontSize: 12, color: '#8A8A8A', marginLeft: 6, fontWeight: 500 }}>on Amazon</span>
+                  <span style={{ fontSize: 12, color: '#8A8A8A', marginLeft: 6, fontWeight: 500 }}>on Shopify</span>
                 </div>
                 <a
                   href={product.href}
-                  target="_blank" rel="noopener noreferrer"
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 7,
                     padding: '10px 20px', borderRadius: 999,
@@ -378,7 +377,7 @@ export default function ProductDifferences() {
                     <path d="M3 6h18" />
                     <path d="M16 10a4 4 0 0 1-8 0" />
                   </svg>
-                  Buy on Amazon
+                  Buy Now
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M7 17 17 7" /><path d="M7 7h10v10" />
                   </svg>

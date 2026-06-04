@@ -137,15 +137,13 @@ export default function Cta() {
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
               <m.a
-                href="https://www.amazon.com/EXTNGO-Flat-Portable-Speed-Swiftly-Networks-Cascadable-Connector-UTP/dp/B01LVZ3UI6?ref_=ast_sto_dp&th=1"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
                 className="btn btn-primary"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 style={{ fontSize: 15, padding: '15px 30px', textDecoration: 'none' }}
               >
-                Shop Extngo
+                Buy Now
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                 </svg>
