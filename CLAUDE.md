@@ -107,16 +107,23 @@ Deploy via Vercel — push to `main` and Vercel auto-builds. The Vercel project 
 - `/blog`, `/blog/[slug]` — blog
 - `/sitemap.xml` — generated from `src/app/sitemap.ts`
 
-## Buy links — single source of truth
+## Buy Now flow (zero redirect, all via Storefront Web Components)
 
-Every Buy / Shop CTA across the site routes to a Shopify product page (no more Amazon affiliate links). Canonical URLs live in [src/lib/shopify-links.ts](src/lib/shopify-links.ts) — import `SHOPIFY_BUY` or `PRODUCT_HANDLES` from there. When you add a new SKU, update that file once and references resolve everywhere.
+Every Buy Now CTA on the site is wired to the global `<shopify-cart id="main-cart">` mounted in `ShopifyRoot`. Clicks open the cart in place; the user stays on the marketing page until they hit CHECKOUT inside the cart modal. No `extngo.com/products/...` redirects, no Amazon affiliate links.
 
-- `SHOPIFY_BUY.cable50ft` → 50ft Orange product page (`extngo.com/products/extngo-retractable-...`)
-- `SHOPIFY_BUY.cable33ft` → 33ft Green product page
-- `SHOPIFY_BUY.cableBlue` → `/shop` (no Shopify SKU for Blue Edition yet — sends users to the in-app storefront)
-- `SHOPIFY_BUY.default` → 50ft (use when the user hasn't selected a variant)
+### How it works
+- `ShopifyRoot` mounts two **hidden `<shopify-context>` triggers**, one per Shopify SKU. Each trigger's `<template>` contains a sr-only `<button data-shopify-buy="KEY">` whose inline `onclick` runs `document.getElementById('main-cart').addLine(event).showModal()`. Because the trigger lives inside a product context, the cart knows which product to add.
+- `src/lib/shopify-buy.ts` exposes `buyShopify(key: BuyKey)`. It dispatches a click to the matching hidden trigger. Any visible Buy Now button on the site calls `buyShopify('cable50ft' | 'cable33ft' | 'cableBlue')`.
+- `cableBlue` falls back to `window.location.href = '/shop'` (no Shopify SKU yet for the Blue Edition).
 
-Buy/Shop CTAs deliberately open in the **same tab**, not `_blank`. Checkout is the conversion endpoint — don't fragment the flow.
+### Adding a new SKU
+1. Add the handle in `PRODUCT_HANDLES` (src/lib/shopify-buy.ts).
+2. Add the matching `<shopify-context>` trigger block in `ShopifyRoot.tsx`.
+3. Add the new key to the `BuyKey` union.
+4. Use `buyShopify('newKey')` from any component.
+
+### Where the visible buttons live
+HeroStatic, HeroSafe (Hero variants), ProductDetail, ProductDifferences (3 cards), Cta, WhoItsFor (desktop + mobile), Footer (Product column entries), products/blue/page (hero CTA + bottom CTA), and the `/shop` template-driven cards.
 
 ## Gotchas
 

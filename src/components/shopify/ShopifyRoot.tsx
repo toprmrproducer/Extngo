@@ -1,3 +1,12 @@
+import { PRODUCT_HANDLES } from '@/lib/shopify-buy'
+
+// Hidden Shopify product contexts: each renders a single invisible button bound
+// to a product handle. Visible Buy Now CTAs across the site programmatically
+// dispatch a click to these triggers so the cart knows which product to add
+// without any redirect. See src/lib/shopify-buy.ts for the helper.
+const triggerTemplate = (key: string) =>
+  `<button type="button" data-shopify-buy="${key}" tabindex="-1" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" onclick="document.getElementById('main-cart').addLine(event).showModal()"></button>`
+
 export default function ShopifyRoot() {
   return (
     <>
@@ -8,6 +17,18 @@ export default function ShopifyRoot() {
         language="en"
       />
       <shopify-cart id="main-cart" />
+
+      {/* Hidden product contexts. Triggers live inside <template> so the web
+          component renders them with the product context attached. */}
+      <div aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
+        <shopify-context type="product" handle={PRODUCT_HANDLES.cable50ft}>
+          <template dangerouslySetInnerHTML={{ __html: triggerTemplate('cable50ft') }} />
+        </shopify-context>
+        <shopify-context type="product" handle={PRODUCT_HANDLES.cable33ft}>
+          <template dangerouslySetInnerHTML={{ __html: triggerTemplate('cable33ft') }} />
+        </shopify-context>
+      </div>
+
       <style dangerouslySetInnerHTML={{ __html: `
         shopify-store { display: none; }
         shopify-cart::part(dialog) { border-radius: 16px; }

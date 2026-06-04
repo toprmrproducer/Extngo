@@ -1,5 +1,7 @@
 'use client'
 
+import { buyShopify } from '@/lib/shopify-buy'
+
 import { useState } from 'react'
 import { m, LazyMotion, domAnimation } from 'framer-motion'
 import HeroScene from './HeroScene'
@@ -131,8 +133,9 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                 transition={{ duration: 0.7, delay: 1.4, ease: [0,0,0.2,1] }}
                 style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(10px,2vw,14px)', marginTop: 'clamp(24px,4vh,36px)' }}
               >
-                <m.a
-                  href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
+                <m.button
+                  type="button"
+                  onClick={() => buyShopify('cable50ft')}
                   className="btn btn-primary"
                   style={{
                     background: 'var(--accent)', color: '#FFFFFF', border: 'none',
@@ -151,7 +154,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                   </svg>
-                </m.a>
+                </m.button>
 
                 <m.button
                   onClick={() => setIsModalOpen(true)}

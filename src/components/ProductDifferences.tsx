@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
+import { buyShopify, type BuyKey } from '@/lib/shopify-buy'
 
 type ProductSpec = [string, string]
 
@@ -21,7 +22,7 @@ type Product = {
   shadow: string
   specs: ProductSpec[]
   price: string
-  href: string
+  buyKey: BuyKey
   pageHref?: string
   accentRgb: string
   accentColor: string
@@ -50,7 +51,7 @@ const PRODUCTS: Product[] = [
       ['Drivers', 'Plug & Play'],
     ],
     price: '$70.02',
-    href: '/shop',
+    buyKey: 'cableBlue' as const,
     pageHref: '/products/blue',
     accentRgb: '33,150,243',
     accentColor: '#2196F3',
@@ -76,7 +77,7 @@ const PRODUCTS: Product[] = [
       ['Drivers', 'Plug & Play'],
     ],
     price: '$79.99',
-    href: 'https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender',
+    buyKey: 'cable50ft' as const,
     accentRgb: '232,67,26',
     accentColor: '#E8431A',
     popular: true,
@@ -102,7 +103,7 @@ const PRODUCTS: Product[] = [
       ['Drivers', 'Plug & Play'],
     ],
     price: '$69.99',
-    href: 'https://extngo.com/products/retractable-network-cable-extender-33-feet-10-meter-cat-6-ethernet-cable-flat-portable-1-gbps-data-speed-swiftly-setup-temp-networks-cascadable-male-female-rj45-connector-utp-cable-reel',
+    buyKey: 'cable33ft' as const,
     accentRgb: '76,175,80',
     accentColor: '#4CAF50',
   },
@@ -349,8 +350,9 @@ export default function ProductDifferences() {
                   </span>
                   <span style={{ fontSize: 12, color: '#8A8A8A', marginLeft: 6, fontWeight: 500 }}>on Shopify</span>
                 </div>
-                <a
-                  href={product.href}
+                <button
+                  type="button"
+                  onClick={() => buyShopify(product.buyKey)}
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 7,
                     padding: '10px 20px', borderRadius: 999,
@@ -358,16 +360,17 @@ export default function ProductDifferences() {
                     border: `1px solid rgba(${product.accentRgb},0.2)`,
                     color: product.badge.color,
                     fontSize: 13, fontWeight: 600,
-                    textDecoration: 'none', letterSpacing: '0.3px',
+                    cursor: 'pointer',
+                    letterSpacing: '0.3px',
                     transition: 'background 0.2s, border-color 0.2s',
                   }}
                   onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLAnchorElement
+                    const el = e.currentTarget as HTMLButtonElement
                     el.style.background = `rgba(${product.accentRgb},0.13)`
                     el.style.borderColor = `rgba(${product.accentRgb},0.42)`
                   }}
                   onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLAnchorElement
+                    const el = e.currentTarget as HTMLButtonElement
                     el.style.background = `rgba(${product.accentRgb},0.06)`
                     el.style.borderColor = `rgba(${product.accentRgb},0.2)`
                   }}
@@ -381,7 +384,7 @@ export default function ProductDifferences() {
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M7 17 17 7" /><path d="M7 7h10v10" />
                   </svg>
-                </a>
+                </button>
               </div>
             </m.div>
           ))}

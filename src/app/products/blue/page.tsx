@@ -8,8 +8,10 @@ import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
 
-// Blue Edition has no Shopify SKU yet — Buy CTAs route to the Shopify-powered /shop page.
-const BUY_LINK = '/shop'
+import { buyShopify } from '@/lib/shopify-buy'
+
+// Blue Edition has no Shopify SKU yet, buyShopify('cableBlue') falls back to /shop.
+const BUY_KEY = 'cableBlue' as const
 const LAUNCH_DATE = new Date('2026-04-26T00:00:00')
 
 // ── Countdown ────────────────────────────────────────────────────────────────
@@ -192,7 +194,7 @@ export default function BluePage() {
     },
     offers: {
       '@type': 'Offer',
-      url: BUY_LINK,
+      url: '/shop',
       priceCurrency: 'USD',
       availability: launched ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
       seller: {
@@ -296,22 +298,24 @@ export default function BluePage() {
             )}
 
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link
-                href={BUY_LINK}
+              <button
+                type="button"
+                onClick={() => buyShopify(BUY_KEY)}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 9,
                   padding: '14px 28px', borderRadius: 999,
-                  background: '#2196F3', color: '#fff',
-                  fontWeight: 700, fontSize: 15, textDecoration: 'none',
+                  background: '#2196F3', color: '#fff', border: 0,
+                  fontWeight: 700, fontSize: 15, cursor: 'pointer',
                   boxShadow: '0 10px 32px rgba(33,150,243,0.45)',
                   transition: 'transform 0.2s, box-shadow 0.2s',
+                  fontFamily: 'inherit',
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
                 </svg>
                 Buy Now
-              </Link>
+              </button>
               <Link
                 href="/"
                 style={{
@@ -724,21 +728,23 @@ export default function BluePage() {
               ))}
             </div>
 
-            <Link
-              href={BUY_LINK}
+            <button
+              type="button"
+              onClick={() => buyShopify(BUY_KEY)}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 9,
                 padding: '16px 34px', borderRadius: 999,
-                background: '#2196F3', color: '#fff',
-                fontWeight: 700, fontSize: 16, textDecoration: 'none',
+                background: '#2196F3', color: '#fff', border: 0,
+                fontWeight: 700, fontSize: 16, cursor: 'pointer',
                 boxShadow: '0 12px 40px rgba(33,150,243,0.45)',
+                fontFamily: 'inherit',
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
               </svg>
               Buy Now
-            </Link>
+            </button>
 
             <p style={{ marginTop: 16, fontSize: 12.5, color: 'rgba(255,255,255,0.3)' }}>
               Buy on Shopify · Fast shipping · Reliable support

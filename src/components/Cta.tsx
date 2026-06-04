@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
 import B2BContactModal from './B2BContactModal'
+import { buyShopify } from '@/lib/shopify-buy'
 
 const STATS = [
   { value: '2,400+', label: 'Happy Pros' },
@@ -136,8 +137,9 @@ export default function Cta() {
               className="cta-btn-row"
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
-              <m.a
-                href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
+              <m.button
+                type="button"
+                onClick={() => buyShopify('cable50ft')}
                 className="btn btn-primary"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
@@ -147,7 +149,7 @@ export default function Cta() {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                 </svg>
-              </m.a>
+              </m.button>
               <m.button
                 onClick={() => setIsModalOpen(true)}
                 whileHover={{ y: -2 }}

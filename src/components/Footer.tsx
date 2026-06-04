@@ -1,19 +1,20 @@
 'use client'
 
 import { useRef } from 'react'
+import { buyShopify } from '@/lib/shopify-buy'
 import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
 
-const SHOPIFY_50FT = 'https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender'
-const SHOPIFY_33FT = 'https://extngo.com/products/retractable-network-cable-extender-33-feet-10-meter-cat-6-ethernet-cable-flat-portable-1-gbps-data-speed-swiftly-setup-temp-networks-cascadable-male-female-rj45-connector-utp-cable-reel'
-
-const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+// Footer product entries open the on-page Shopify cart via the global hidden triggers,
+// so they stay on the marketing site and use the storefront web components.
+type LinkEntry = { label: string; href?: string; buyKey?: import('@/lib/shopify-buy').BuyKey }
+const COLUMNS: { title: string; links: LinkEntry[] }[] = [
   {
     title: 'Product',
     links: [
-      { label: 'Extngo Orange (50ft)', href: SHOPIFY_50FT },
-      { label: 'Extngo Green (33ft)', href: SHOPIFY_33FT },
+      { label: 'Extngo Orange (50ft)', buyKey: 'cable50ft' },
+      { label: 'Extngo Green (33ft)', buyKey: 'cable33ft' },
       { label: 'Specs & Compare', href: '#' },
       { label: 'B2B Inquiry', href: '#' },
       { label: 'Bulk Orders', href: '#' },
@@ -196,29 +197,44 @@ export default function Footer() {
                   {col.title}
                 </h4>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {col.links.map(l => (
-                    <li key={l.label}>
-                      <a
-                        href={l.href}
-                        target={l.href.startsWith('http') ? '_blank' : undefined}
-                        rel={l.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        style={{
-                          fontSize: 'clamp(12px,3.5vw,14px)',
-                          color: '#AAAAAA',
-                          textDecoration: 'none',
-                          transition: 'color 0.2s',
-                        }}
-                        onMouseEnter={e => {
-                          (e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent)'
-                        }}
-                        onMouseLeave={e => {
-                          (e.currentTarget as HTMLAnchorElement).style.color = '#AAAAAA'
-                        }}
-                      >
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
+                  {col.links.map(l => {
+                    const sharedStyle = {
+                      fontSize: 'clamp(12px,3.5vw,14px)',
+                      color: '#AAAAAA',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s',
+                      background: 'none',
+                      border: 0,
+                      padding: 0,
+                      cursor: 'pointer',
+                      textAlign: 'left' as const,
+                      fontFamily: 'inherit',
+                    }
+                    return (
+                      <li key={l.label}>
+                        {l.buyKey ? (
+                          <button
+                            type="button"
+                            onClick={() => buyShopify(l.buyKey!)}
+                            style={sharedStyle}
+                            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)' }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#AAAAAA' }}
+                          >
+                            {l.label}
+                          </button>
+                        ) : (
+                          <a
+                            href={l.href}
+                            style={sharedStyle}
+                            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent)' }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#AAAAAA' }}
+                          >
+                            {l.label}
+                          </a>
+                        )}
+                      </li>
+                    )
+                  })}
                 </ul>
               </m.div>
             ))}

@@ -4,6 +4,7 @@ import { m, LazyMotion, domAnimation } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { fadeUp, fadeIn, staggerContainer } from '@/lib/motion'
+import { buyShopify } from '@/lib/shopify-buy'
 
 function MicroSpec({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
   const labels: Record<string, string> = { tl: '50 FT / 15 M', tr: '1 GBPS', bl: '1.8 LBS', br: 'CAT6 FLAT' }
@@ -235,8 +236,9 @@ export default function ProductDetail() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <m.a
-                href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
+              <m.button
+                type="button"
+                onClick={() => buyShopify('cable50ft')}
                 style={{
                   background: 'var(--accent)', color: '#fff', border: 0,
                   padding: '14px 22px', borderRadius: 999, fontWeight: 600,
@@ -248,7 +250,7 @@ export default function ProductDetail() {
                 whileTap={{ scale: 0.97 }}
               >
                 Buy Now →
-              </m.a>
+              </m.button>
               <m.a
                 href="#product-differences"
                 style={{

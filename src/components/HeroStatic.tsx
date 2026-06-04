@@ -1,4 +1,8 @@
-// Static hero for instant LCP - no animations, no client JS required
+'use client'
+
+// Static hero for instant LCP. SSR-rendered, client adds onClick to the Buy CTA.
+import { buyShopify } from '@/lib/shopify-buy'
+
 export default function HeroStatic() {
   return (
     <div
@@ -95,8 +99,9 @@ export default function HeroStatic() {
               marginTop: 'clamp(24px,4vh,36px)' 
             }}
           >
-            <a
-              href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
+            <button
+              type="button"
+              onClick={() => buyShopify('cable50ft')}
               className="btn btn-primary"
               style={{
                 background: '#E8431A', 
@@ -121,7 +126,7 @@ export default function HeroStatic() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
               </svg>
-            </a>
+            </button>
 
             <button
               className="btn btn-ghost"

@@ -1,5 +1,7 @@
 'use client'
 
+import { buyShopify } from '@/lib/shopify-buy'
+
 import { useEffect, useRef, useState, useMemo, useCallback, memo } from 'react'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { spring } from '@/lib/motion'
@@ -414,18 +416,19 @@ export default function WhoItsFor() {
               className="wif-buttons-desktop"
               style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
             >
-              <m.a
-                href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
+              <m.button
+                type="button"
+                onClick={() => buyShopify('cable50ft')}
                 className="btn btn-primary"
                 style={{ fontSize: 14, padding: '13px 28px', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Shop Now
+                Buy Now
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                 </svg>
-              </m.a>
+              </m.button>
               <m.a
                 href="#product-differences"
                 className="btn btn-ghost"
@@ -535,18 +538,19 @@ export default function WhoItsFor() {
               className="wif-buttons-mobile"
               style={{ display: 'none', gap: 12, flexWrap: 'wrap', marginTop: 20 }}
             >
-              <m.a
-                href="https://extngo.com/products/extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender"
+              <m.button
+                type="button"
+                onClick={() => buyShopify('cable50ft')}
                 className="btn btn-primary"
                 style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Shop Now
+                Buy Now
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                 </svg>
-              </m.a>
+              </m.button>
               <m.a
                 href="#product-differences"
                 className="btn btn-ghost"
