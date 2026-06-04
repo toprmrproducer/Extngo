@@ -107,6 +107,17 @@ Deploy via Vercel — push to `main` and Vercel auto-builds. The Vercel project 
 - `/blog`, `/blog/[slug]` — blog
 - `/sitemap.xml` — generated from `src/app/sitemap.ts`
 
+## Buy links — single source of truth
+
+Every Buy / Shop CTA across the site routes to a Shopify product page (no more Amazon affiliate links). Canonical URLs live in [src/lib/shopify-links.ts](src/lib/shopify-links.ts) — import `SHOPIFY_BUY` or `PRODUCT_HANDLES` from there. When you add a new SKU, update that file once and references resolve everywhere.
+
+- `SHOPIFY_BUY.cable50ft` → 50ft Orange product page (`extngo.com/products/extngo-retractable-...`)
+- `SHOPIFY_BUY.cable33ft` → 33ft Green product page
+- `SHOPIFY_BUY.cableBlue` → `/shop` (no Shopify SKU for Blue Edition yet — sends users to the in-app storefront)
+- `SHOPIFY_BUY.default` → 50ft (use when the user hasn't selected a variant)
+
+Buy/Shop CTAs deliberately open in the **same tab**, not `_blank`. Checkout is the conversion endpoint — don't fragment the flow.
+
 ## Gotchas
 
 - `<body>` carries `suppressHydrationWarning` in `app/layout.tsx`. Don't remove it — browser extensions (Brave especially) inject a `style` attribute on body and cause a React hydration warning otherwise. If you ever need to debug a real body-level mismatch, temporarily remove the prop, reproduce, and restore.
