@@ -104,7 +104,7 @@ export default function RootLayout({
           .btn{display:inline-flex;align-items:center;gap:10px;border-radius:8px;font-weight:600;cursor:pointer;border:0;font-family:var(--font-geist)}
         `}} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {/* Shopify Storefront Web Components — registers <shopify-*> custom elements */}
         <Script
           src="https://cdn.shopify.com/storefront/web-components.js"
