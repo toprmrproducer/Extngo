@@ -1,7 +1,7 @@
 'use client'
 
 // Static hero for instant LCP. SSR-rendered, client adds onClick to the Buy CTA.
-import { buyShopify } from '@/lib/shopify-buy'
+import { openProductDetail } from '@/lib/shopify-buy'
 
 export default function HeroStatic() {
   return (
@@ -101,7 +101,7 @@ export default function HeroStatic() {
           >
             <button
               type="button"
-              onClick={() => buyShopify('cable50ft')}
+              onClick={() => openProductDetail('cable50ft')}
               className="btn btn-primary"
               style={{
                 background: '#E8431A', 

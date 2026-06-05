@@ -1,6 +1,6 @@
 'use client'
 
-import { buyShopify } from '@/lib/shopify-buy'
+import { openProductDetail } from '@/lib/shopify-buy'
 
 import { useEffect, useRef, useState, useMemo, useCallback, memo } from 'react'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
@@ -418,7 +418,7 @@ export default function WhoItsFor() {
             >
               <m.button
                 type="button"
-                onClick={() => buyShopify('cable50ft')}
+                onClick={() => openProductDetail('cable50ft')}
                 className="btn btn-primary"
                 style={{ fontSize: 14, padding: '13px 28px', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}
@@ -540,7 +540,7 @@ export default function WhoItsFor() {
             >
               <m.button
                 type="button"
-                onClick={() => buyShopify('cable50ft')}
+                onClick={() => openProductDetail('cable50ft')}
                 className="btn btn-primary"
                 style={{ fontSize: 14, padding: '13px 28px', flex: 1, justifyContent: 'center', textDecoration: 'none' }}
                 whileHover={{ y: -2 }}

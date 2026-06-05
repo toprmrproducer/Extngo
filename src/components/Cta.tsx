@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
 import B2BContactModal from './B2BContactModal'
-import { buyShopify } from '@/lib/shopify-buy'
+import { openProductDetail } from '@/lib/shopify-buy'
 
 const STATS = [
   { value: '2,400+', label: 'Happy Pros' },
@@ -139,7 +139,7 @@ export default function Cta() {
             >
               <m.button
                 type="button"
-                onClick={() => buyShopify('cable50ft')}
+                onClick={() => openProductDetail('cable50ft')}
                 className="btn btn-primary"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}

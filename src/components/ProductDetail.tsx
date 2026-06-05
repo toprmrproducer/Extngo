@@ -4,7 +4,7 @@ import { m, LazyMotion, domAnimation } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { fadeUp, fadeIn, staggerContainer } from '@/lib/motion'
-import { buyShopify } from '@/lib/shopify-buy'
+import { openProductDetail } from '@/lib/shopify-buy'
 
 function MicroSpec({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
   const labels: Record<string, string> = { tl: '50 FT / 15 M', tr: '1 GBPS', bl: '1.8 LBS', br: 'CAT6 FLAT' }
@@ -238,7 +238,7 @@ export default function ProductDetail() {
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <m.button
                 type="button"
-                onClick={() => buyShopify('cable50ft')}
+                onClick={() => openProductDetail('cable50ft')}
                 style={{
                   background: 'var(--accent)', color: '#fff', border: 0,
                   padding: '14px 22px', borderRadius: 999, fontWeight: 600,

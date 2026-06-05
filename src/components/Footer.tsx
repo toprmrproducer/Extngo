@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { buyShopify } from '@/lib/shopify-buy'
+import { openProductDetail } from '@/lib/shopify-buy'
 import Image from 'next/image'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
@@ -215,7 +215,7 @@ export default function Footer() {
                         {l.buyKey ? (
                           <button
                             type="button"
-                            onClick={() => buyShopify(l.buyKey!)}
+                            onClick={() => openProductDetail(l.buyKey!)}
                             style={sharedStyle}
                             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)' }}
                             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#AAAAAA' }}

@@ -1,90 +1,94 @@
 'use client'
 
-const PRODUCTS = [
+import { openProductDetail, type BuyKey } from '@/lib/shopify-buy'
+import { PRODUCT_HANDLES } from '@/lib/shopify-buy'
+
+type ShopCard = {
+  key: BuyKey
+  badge: string
+  tagline: string
+}
+
+const HERO_PRODUCTS: ShopCard[] = [
   {
-    key: '50ft',
-    handle:
-      'extngo-retractable-ethernet-cable-50-feet-15-meter-cat6-flat-internet-extension-cord-reel-portable-1-gbps-data-speed-swiftly-setup-extend-networks-male-female-rj-45-connector-utp-extender',
+    key: 'cable50ft',
     badge: '50 ft / 15 m',
-    tagline: 'For full office runs and conference setups.',
+    tagline: 'For full office runs, conference setups, and IT fieldwork.',
   },
   {
-    key: '33ft',
-    handle:
-      'retractable-network-cable-extender-33-feet-10-meter-cat-6-ethernet-cable-flat-portable-1-gbps-data-speed-swiftly-setup-temp-networks-cascadable-male-female-rj45-connector-utp-cable-reel',
+    key: 'cable33ft',
     badge: '33 ft / 10 m',
-    tagline: 'For hotel rooms, home labs and travel kits.',
+    tagline: 'For hotel rooms, home labs, and travel kits.',
   },
-] as const
+]
 
-const openProductModal = `
+const BLUE_HANDLE_PLACEHOLDER = 'extngo-usb-c-to-ethernet-15-meter-retractable-cable'
+
+const openModal = `
   (function(e){
-    var d=document.getElementById('product-modal');
-    var c=document.getElementById('product-modal-context');
-    if(d&&c){c.update(e);d.showModal();}
+    var ctx = document.getElementById('product-detail-context');
+    var dlg = document.getElementById('product-detail-modal');
+    if (ctx && dlg) { ctx.update(e); dlg.showModal(); }
   })(event)
 `.replace(/\s+/g, ' ')
-
-const addToCart = `
-  (function(e){
-    var c=document.getElementById('main-cart');
-    if(c){c.addLine(e); c.showModal();}
-  })(event)
-`.replace(/\s+/g, ' ')
-
-const buyNow = `document.querySelector('shopify-store').buyNow(event)`
-
-const closeModal = `document.getElementById('product-modal').close()`
 
 export default function ShopifyStorefront() {
   return (
     <>
-      {/* Hero grid: 2 main products */}
+      {/* Two hero SKUs — each card is its own shopify-context. Clicking View
+          details dispatches into the global product-detail modal. */}
       <section className="shop-grid">
-        {PRODUCTS.map((p) => (
+        {HERO_PRODUCTS.map((p) => (
           <article key={p.key} className="shop-card">
-            <shopify-context type="product" handle={p.handle}>
+            <shopify-context type="product" handle={PRODUCT_HANDLES[p.key]}>
               <template
                 dangerouslySetInnerHTML={{
                   __html: `
-                    <div class="shop-card__inner">
-                      <div class="shop-card__media">
-                        <shopify-media width="520" height="520" query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+                    <div class="shop-card__media">
+                      <shopify-media width="420" height="420" query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+                    </div>
+                    <div class="shop-card__body">
+                      <span class="shop-card__badge">${p.badge}</span>
+                      <h2 class="shop-card__title"><shopify-data query="product.title"></shopify-data></h2>
+                      <p class="shop-card__tagline">${p.tagline}</p>
+                      <div class="shop-card__price">
+                        <shopify-money query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
                       </div>
-                      <div class="shop-card__body">
-                        <div class="shop-card__badge">${p.badge}</div>
-                        <h2 class="shop-card__title"><shopify-data query="product.title"></shopify-data></h2>
-                        <p class="shop-card__tagline">${p.tagline}</p>
-                        <div class="shop-card__price">
-                          <shopify-money query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
-                          <shopify-money class="shop-card__compare" query="product.selectedOrFirstAvailableVariant.compareAtPrice"></shopify-money>
-                        </div>
-                        <shopify-variant-selector></shopify-variant-selector>
-                        <div class="shop-card__buttons">
-                          <button class="shop-btn shop-btn--primary"
-                            onclick="${addToCart}"
-                            shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
-                            Add to cart
-                          </button>
-                          <button class="shop-btn shop-btn--secondary"
-                            onclick="${buyNow}"
-                            shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
-                            Buy now
-                          </button>
-                        </div>
-                        <button class="shop-card__details-link"
-                          onclick="${openProductModal}">
-                          View full details &rarr;
-                        </button>
-                      </div>
+                      <button type="button" class="shop-card__cta"
+                        onclick="${openModal}"
+                        shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
+                        View details
+                      </button>
                     </div>
                   `,
                 }}
               />
-              <div data-shopify-loading-placeholder="true" className="shop-card__placeholder" />
             </shopify-context>
           </article>
         ))}
+
+        {/* Blue Edition — not on Shopify yet, render as static Out of Stock card */}
+        <article className="shop-card shop-card--oos">
+          <div className="shop-card__media shop-card__media--blue">
+            {/* Use existing brand image if available, else fallback to gradient */}
+            <picture>
+              <img src="/product-blue.png" alt="EXTNGO USB-C to Ethernet Blue Edition" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+            </picture>
+          </div>
+          <div className="shop-card__body">
+            <span className="shop-card__badge shop-card__badge--blue">USB-C / 15 m</span>
+            <h2 className="shop-card__title">EXTNGO USB-C to Ethernet, 15 m</h2>
+            <p className="shop-card__tagline">Built for USB-C laptops, iPads, and phones. Same retractable flat CAT6 cable, no dongle needed.</p>
+            <div className="shop-card__price shop-card__price--muted">$70.02</div>
+            <button type="button" className="shop-card__cta shop-card__cta--oos" disabled aria-disabled="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/>
+              </svg>
+              Out of Stock
+            </button>
+          </div>
+        </article>
       </section>
 
       {/* You may also like — frontpage collection */}
@@ -97,8 +101,8 @@ export default function ShopifyStorefront() {
                 <div class="shop-collection__grid">
                   <shopify-list-context type="product" query="collection.products" first="8">
                     <template>
-                      <button class="shop-collection__card"
-                        onclick="${openProductModal}"
+                      <button type="button" class="shop-collection__card"
+                        onclick="${openModal}"
                         shopify-attr--disabled="!product.availableForSale">
                         <div class="shop-collection__media">
                           <shopify-media width="320" height="320" query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
@@ -117,59 +121,17 @@ export default function ShopifyStorefront() {
         </shopify-context>
       </section>
 
-      {/* Quick-view product modal */}
-      <dialog id="product-modal" className="shop-modal">
-        <shopify-context id="product-modal-context" type="product" wait-for-update>
-          <template
-            dangerouslySetInnerHTML={{
-              __html: `
-                <div class="shop-modal__inner">
-                  <button class="shop-modal__close" aria-label="Close"
-                    onclick="${closeModal}">&times;</button>
-                  <div class="shop-modal__grid">
-                    <div class="shop-modal__media">
-                      <shopify-media width="520" height="520" query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
-                    </div>
-                    <div class="shop-modal__body">
-                      <span class="shop-modal__vendor"><shopify-data query="product.vendor"></shopify-data></span>
-                      <h2 class="shop-modal__title"><shopify-data query="product.title"></shopify-data></h2>
-                      <div class="shop-modal__price">
-                        <shopify-money query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
-                        <shopify-money class="shop-card__compare" query="product.selectedOrFirstAvailableVariant.compareAtPrice"></shopify-money>
-                      </div>
-                      <shopify-variant-selector></shopify-variant-selector>
-                      <div class="shop-card__buttons">
-                        <button class="shop-btn shop-btn--primary"
-                          onclick="document.getElementById('main-cart').addLine(event).showModal(); document.getElementById('product-modal').close();"
-                          shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
-                          Add to cart
-                        </button>
-                        <button class="shop-btn shop-btn--secondary"
-                          onclick="${buyNow}"
-                          shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale">
-                          Buy now
-                        </button>
-                      </div>
-                      <div class="shop-modal__desc">
-                        <shopify-data query="product.descriptionHtml"></shopify-data>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              `,
-            }}
-          />
-        </shopify-context>
-      </dialog>
-
       <style jsx global>{`
         .shop-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: clamp(20px, 3vw, 32px);
+          gap: clamp(20px, 3vw, 28px);
         }
-        @media (min-width: 900px) {
-          .shop-grid { grid-template-columns: 1fr 1fr; }
+        @media (min-width: 760px) {
+          .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1100px) {
+          .shop-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
         .shop-card {
           background: #fff;
@@ -177,20 +139,15 @@ export default function ShopifyStorefront() {
           border: 1px solid rgba(26,26,26,.06);
           box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 36px -16px rgba(26,26,26,0.12);
           overflow: hidden;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .shop-card:hover {
           transform: translateY(-2px);
           box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 20px 48px -16px rgba(26,26,26,0.18);
         }
-        .shop-card__inner {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 0;
-        }
-        @media (min-width: 600px) {
-          .shop-card__inner { grid-template-columns: 1fr 1fr; }
-        }
+        .shop-card--oos { opacity: 0.92; }
         .shop-card__media {
           background: radial-gradient(circle at 35% 30%, #FFF9F2, #F5ECDC 55%, #E6D7BD 100%);
           padding: 28px;
@@ -199,20 +156,23 @@ export default function ShopifyStorefront() {
           justify-content: center;
           aspect-ratio: 1/1;
         }
+        .shop-card__media--blue {
+          background: radial-gradient(circle at 35% 30%, #E6F3FF, #B9DBF7 55%, #6FA8D6 100%);
+        }
         .shop-card__media img {
           max-width: 100%;
           height: auto;
           mix-blend-mode: multiply;
         }
         .shop-card__body {
-          padding: clamp(24px, 3vw, 36px);
+          padding: clamp(20px, 2.5vw, 28px);
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 12px;
+          flex: 1;
         }
         .shop-card__badge {
           display: inline-flex;
-          align-items: center;
           align-self: flex-start;
           padding: 6px 12px;
           background: rgba(26,26,26,.04);
@@ -224,137 +184,71 @@ export default function ShopifyStorefront() {
           text-transform: uppercase;
           border-radius: 999px;
         }
+        .shop-card__badge--blue {
+          background: rgba(33,150,243,.08);
+          border-color: rgba(33,150,243,.22);
+          color: #1565C0;
+        }
         .shop-card__title {
           margin: 0;
           font-family: var(--font-bricolage);
-          font-size: clamp(20px, 2vw, 26px);
+          font-size: clamp(18px, 1.6vw, 22px);
           font-weight: 800;
           color: #1A1A1A;
           letter-spacing: -0.02em;
-          line-height: 1.15;
+          line-height: 1.18;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
         .shop-card__tagline {
           margin: 0;
           color: #6D6D6D;
-          font-size: 14px;
+          font-size: 13.5px;
           line-height: 1.55;
         }
         .shop-card__price {
-          display: flex;
-          align-items: baseline;
-          gap: 10px;
           font-family: var(--font-geist);
-          font-size: 26px;
+          font-size: 22px;
           font-weight: 700;
           color: #1A1A1A;
           letter-spacing: -0.02em;
+          margin-top: 4px;
         }
-        .shop-card__compare {
-          text-decoration: line-through;
-          opacity: 0.45;
-          font-size: 16px;
-          font-weight: 500;
-        }
-        .shop-card__buttons {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          margin-top: 6px;
-        }
-        .shop-btn {
+        .shop-card__price--muted { opacity: 0.7; }
+        .shop-card__cta {
+          margin-top: 8px;
           font-family: var(--font-geist);
           font-size: 14px;
           font-weight: 600;
           letter-spacing: 0.3px;
-          padding: 14px 22px;
+          padding: 13px 22px;
           border-radius: 999px;
           cursor: pointer;
           border: 0;
-          transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .shop-btn--primary {
           background: #E8431A;
           color: #fff;
           box-shadow: 0 10px 24px rgba(232,67,26,.28);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .shop-btn--primary:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 16px 32px rgba(232,67,26,.4);
+        .shop-card__cta:hover { transform: translateY(-1px); box-shadow: 0 16px 32px rgba(232,67,26,.4); }
+        .shop-card__cta[disabled] { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .shop-card__cta--oos {
+          background: rgba(33,150,243,.18);
+          color: #1565C0;
+          border: 1px dashed rgba(33,150,243,.55);
+          box-shadow: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          opacity: 1;
         }
-        .shop-btn--secondary {
-          background: transparent;
-          color: #1A1A1A;
-          border: 1.5px solid rgba(26,26,26,.18);
-        }
-        .shop-btn--secondary:hover {
-          border-color: rgba(26,26,26,.35);
-          transform: translateY(-1px);
-        }
-        .shop-btn[disabled] {
-          opacity: 0.4;
-          cursor: not-allowed;
-          transform: none;
-        }
-        .shop-card__details-link {
-          background: none;
-          border: 0;
-          color: #6D6D6D;
-          font-family: var(--font-geist);
-          font-size: 13px;
-          font-weight: 500;
-          padding: 0;
-          margin-top: 4px;
-          text-align: left;
-          cursor: pointer;
-          align-self: flex-start;
-        }
-        .shop-card__details-link:hover { color: #E8431A; }
-        .shop-card__placeholder {
-          min-height: 480px;
-          background: rgba(26,26,26,.03);
-        }
-
-        /* Variant selector — branded */
-        shopify-variant-selector::part(form) {
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-          padding: 14px 0;
-          border-top: 1px solid rgba(26,26,26,.08);
-        }
-        shopify-variant-selector::part(label) {
-          font-family: var(--font-geist);
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: #6D6D6D;
-        }
-        shopify-variant-selector::part(radio) {
-          background: transparent;
-          border: 1.5px solid rgba(26,26,26,.18);
-          color: #1A1A1A;
-          border-radius: 999px;
-          padding: 10px 18px;
-          font-family: var(--font-geist);
-          font-size: 13px;
-          font-weight: 500;
-        }
-        shopify-variant-selector::part(radio):hover {
-          background: rgba(232,67,26,.06);
-          border-color: rgba(232,67,26,.35);
-          color: #E8431A;
-        }
-        shopify-variant-selector::part(radio-selected) {
-          background: #1A1A1A;
-          color: #fff;
-          border-color: #1A1A1A;
-        }
+        .shop-card__cta--oos:hover { transform: none; box-shadow: none; }
 
         /* Collection */
-        .shop-collection {
-          margin-top: clamp(56px, 8vh, 96px);
-        }
+        .shop-collection { margin-top: clamp(56px, 8vh, 96px); }
         .shop-collection__title {
           margin: 0 0 24px;
           font-family: var(--font-bricolage);
@@ -419,83 +313,6 @@ export default function ShopifyStorefront() {
           color: #6D6D6D;
           font-weight: 500;
         }
-
-        /* Modal */
-        .shop-modal {
-          padding: 0;
-          border: 0;
-          border-radius: 20px;
-          max-width: 920px;
-          width: calc(100% - 32px);
-          box-shadow: 0 25px 60px -12px rgba(0,0,0,0.25);
-        }
-        .shop-modal::backdrop { background: rgba(26,26,26,.45); backdrop-filter: blur(4px); }
-        .shop-modal__inner { padding: 24px; }
-        .shop-modal__close {
-          position: absolute;
-          top: 14px;
-          right: 14px;
-          width: 36px;
-          height: 36px;
-          border-radius: 999px;
-          background: rgba(26,26,26,.06);
-          border: 0;
-          font-size: 20px;
-          color: #1A1A1A;
-          cursor: pointer;
-        }
-        .shop-modal__close:hover { background: rgba(26,26,26,.12); }
-        .shop-modal__grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 24px;
-        }
-        @media (min-width: 760px) { .shop-modal__grid { grid-template-columns: 1fr 1fr; } }
-        .shop-modal__media {
-          background: radial-gradient(circle at 35% 30%, #FFF9F2, #F5ECDC 55%, #E6D7BD 100%);
-          border-radius: 16px;
-          padding: 24px;
-          aspect-ratio: 1/1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .shop-modal__media img { max-width: 100%; height: auto; mix-blend-mode: multiply; }
-        .shop-modal__body { display: flex; flex-direction: column; gap: 14px; padding: 12px 0; font-family: var(--font-geist); }
-        .shop-modal__vendor {
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: #6D6D6D;
-        }
-        .shop-modal__title {
-          margin: 0;
-          font-family: var(--font-bricolage);
-          font-size: clamp(20px, 2.2vw, 28px);
-          font-weight: 800;
-          color: #1A1A1A;
-          letter-spacing: -0.02em;
-          line-height: 1.15;
-        }
-        .shop-modal__price {
-          display: flex;
-          align-items: baseline;
-          gap: 10px;
-          font-size: 22px;
-          font-weight: 700;
-          color: #1A1A1A;
-        }
-        .shop-modal__desc {
-          font-size: 14px;
-          color: #4A4A4A;
-          line-height: 1.6;
-          padding-top: 14px;
-          border-top: 1px solid rgba(26,26,26,.08);
-          max-height: 220px;
-          overflow-y: auto;
-        }
-        .shop-modal__desc p { margin: 0 0 10px; }
       `}</style>
     </>
   )

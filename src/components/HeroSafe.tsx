@@ -1,6 +1,6 @@
 'use client'
 
-import { buyShopify } from '@/lib/shopify-buy'
+import { openProductDetail } from '@/lib/shopify-buy'
 
 import { useState } from 'react'
 import { m, LazyMotion, domAnimation } from 'framer-motion'
@@ -135,7 +135,7 @@ export default function HeroSafe({ animKey = 0, showWordmark = true, wordmarkTon
               >
                 <m.button
                   type="button"
-                  onClick={() => buyShopify('cable50ft')}
+                  onClick={() => openProductDetail('cable50ft')}
                   className="btn btn-primary"
                   style={{
                     background: 'var(--accent)', color: '#FFFFFF', border: 'none',

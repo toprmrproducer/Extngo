@@ -8,7 +8,7 @@ import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
 
-// Blue Edition is not on sale yet. CTAs render as disabled "Coming Soon" buttons.
+// Blue Edition is not on Shopify yet. CTAs render as disabled Out of Stock buttons until the SKU goes live.
 const LAUNCH_DATE = new Date('2026-04-26T00:00:00')
 
 // ── Countdown ────────────────────────────────────────────────────────────────
@@ -313,7 +313,7 @@ export default function BluePage() {
                   <circle cx="12" cy="12" r="10"/>
                   <path d="M12 6v6l4 2"/>
                 </svg>
-                Coming Soon
+                Out of Stock
               </button>
               <Link
                 href="/"
@@ -745,7 +745,7 @@ export default function BluePage() {
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M12 6v6l4 2"/>
               </svg>
-              Coming Soon
+              Out of Stock
             </button>
 
             <p style={{ marginTop: 16, fontSize: 12.5, color: 'rgba(255,255,255,0.3)' }}>

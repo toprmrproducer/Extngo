@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { m, LazyMotion, domAnimation, useInView } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion'
-import { buyShopify, type BuyKey } from '@/lib/shopify-buy'
+import { openProductDetail, type BuyKey } from '@/lib/shopify-buy'
 
 type ProductSpec = [string, string]
 
@@ -373,12 +373,12 @@ export default function ProductDifferences() {
                       <circle cx="12" cy="12" r="10" />
                       <path d="M12 6v6l4 2" />
                     </svg>
-                    Coming Soon
+                    Out of Stock
                   </button>
                 ) : (
                   <button
                     type="button"
-                    onClick={() => product.buyKey && buyShopify(product.buyKey)}
+                    onClick={() => product.buyKey && openProductDetail(product.buyKey)}
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 7,
                       padding: '10px 20px', borderRadius: 999,
