@@ -98,7 +98,31 @@ npm run dev            # localhost:3000
 npm run build && npm start
 ```
 
-Deploy via Vercel — push to `main` and Vercel auto-builds. The Vercel project must keep its GitHub repo (Abhinav-Chauhan1/Extngo) wired — never leave it disconnected.
+### Production: Netlify (primary, 5 Jun 2026)
+
+- Production URL: https://extngo-cable.netlify.app
+- Site ID: `37d7457a-28e5-460f-9456-4ed3808994b7`
+- Team: `toprmrproducer's team`
+- Linked repo: `toprmrproducer/Extngo`, branch `main`
+- Auth: SSH deploy key `6a22adf830eab0263c286f71` registered on both Netlify and the GitHub repo (key title "Netlify (extngo-cable)")
+- Build command: `npm run build`, publish dir: `.next`, Node 20
+- Plugin: `@netlify/plugin-nextjs` declared in `netlify.toml`
+- **Build server-side, not locally.** Local `next build` hangs at "Collecting build traces" because iCloud-stat'ing every node_module file deadlocks the trace collector. The Netlify build runner doesn't have iCloud so the build completes in ~75s.
+- Trigger a manual rebuild via API: `netlify api createSiteBuild --data='{"site_id":"37d7457a-28e5-460f-9456-4ed3808994b7"}'`. Poll with `netlify api getSiteDeploy --data='{"site_id":"...","deploy_id":"..."}'` until `state == ready`.
+- The site does NOT have GitHub App auto-deploy on push set up (no `installation_id`). To get automatic deploys on every push, install the Netlify GitHub App on the repo. For now, push then trigger a build via the API command above.
+
+### TypeScript gotcha for Netlify builds
+
+`tsconfig.json` must exclude `node_modules.nosync` and `.next.nosync`. Otherwise `next build` tries to typecheck files inside symlink targets and fails on `fastq/test/example.ts` and similar. Source of truth:
+
+```json
+"include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts"],
+"exclude": ["node_modules", "node_modules.nosync", ".next", ".next.nosync"]
+```
+
+### Legacy: Vercel
+
+The original Vercel project at https://extngo-eight.vercel.app is wired to `Abhinav-Chauhan1/Extngo` upstream (Abhinav's account, Shreyas does not have access). It still serves traffic but does not receive the changes Shreyas pushes to `toprmrproducer/Extngo`. Plan: once Bakir verifies the Netlify site, transfer GitHub repo ownership to him so he can connect his own Vercel or keep Netlify.
 
 ## Routes
 
