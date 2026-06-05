@@ -113,83 +113,103 @@ export default function ShopifyRoot() {
         shopify-cart::part(line-heading) { font-family: var(--font-geist); font-weight: 600; }
         shopify-cart::part(line-price) { font-family: var(--font-geist); font-weight: 600; color: #1A1A1A; }
 
-        /* Product detail modal */
+        /* Product detail modal: full-screen overlay */
         .ext-modal {
           padding: 0;
           border: 0;
-          border-radius: 20px;
-          width: min(960px, calc(100vw - 32px));
-          max-width: 960px;
-          max-height: calc(100vh - 32px);
-          box-shadow: 0 25px 60px -12px rgba(0,0,0,0.35);
+          border-radius: 0;
+          width: 100vw;
+          height: 100vh;
+          max-width: 100vw;
+          max-height: 100vh;
+          margin: 0;
+          inset: 0;
+          background: #FAFAFA;
           overflow: hidden;
           font-family: var(--font-geist);
         }
-        .ext-modal::backdrop { background: rgba(26,26,26,.55); backdrop-filter: blur(6px); }
-        .ext-modal__inner { padding: 28px; position: relative; }
+        .ext-modal::backdrop { background: rgba(26,26,26,.6); backdrop-filter: blur(8px); }
+        .ext-modal__inner {
+          position: relative;
+          height: 100%;
+          padding: clamp(48px, 6vw, 80px) clamp(24px, 5vw, 96px);
+          box-sizing: border-box;
+          overflow-y: auto;
+        }
         .ext-modal__close {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          width: 36px;
-          height: 36px;
+          position: fixed;
+          top: clamp(18px, 2.5vw, 32px);
+          right: clamp(18px, 2.5vw, 32px);
+          width: 44px;
+          height: 44px;
           border-radius: 999px;
           background: rgba(26,26,26,.06);
           border: 0;
-          font-size: 22px;
+          font-size: 26px;
           line-height: 1;
           color: #1A1A1A;
           cursor: pointer;
-          z-index: 2;
+          z-index: 5;
+          transition: background 0.2s ease, transform 0.2s ease;
         }
-        .ext-modal__close:hover { background: rgba(26,26,26,.12); }
+        .ext-modal__close:hover { background: rgba(26,26,26,.14); transform: scale(1.06); }
         .ext-modal__grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 28px;
+          gap: clamp(28px, 4vw, 64px);
+          max-width: 1400px;
+          margin: 0 auto;
+          align-items: center;
+          min-height: 100%;
         }
-        @media (min-width: 760px) {
-          .ext-modal__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+        @media (min-width: 900px) {
+          .ext-modal__grid {
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+          }
         }
         .ext-modal__media {
           background: radial-gradient(circle at 35% 30%, #FFF9F2, #F5ECDC 55%, #E6D7BD 100%);
-          border-radius: 16px;
-          padding: 28px;
+          border-radius: 24px;
+          padding: clamp(28px, 4vw, 56px);
           aspect-ratio: 1/1;
           display: flex;
           align-items: center;
           justify-content: center;
+          max-width: 720px;
+          width: 100%;
+          margin: 0 auto;
         }
         .ext-modal__media img { max-width: 100%; height: auto; mix-blend-mode: multiply; }
         .ext-modal__body {
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: clamp(16px, 1.6vw, 22px);
           min-width: 0;
+          max-width: 560px;
         }
         .ext-modal__vendor {
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 700;
-          letter-spacing: 2px;
+          letter-spacing: 2.4px;
           text-transform: uppercase;
           color: #6D6D6D;
         }
         .ext-modal__title {
           margin: 0;
           font-family: var(--font-bricolage);
-          font-size: clamp(18px, 1.6vw, 24px);
+          font-size: clamp(22px, 2.4vw, 36px);
           font-weight: 800;
           color: #1A1A1A;
-          letter-spacing: -0.02em;
-          line-height: 1.2;
+          letter-spacing: -0.025em;
+          line-height: 1.15;
           word-break: normal;
           overflow-wrap: anywhere;
         }
         .ext-modal__price {
           display: flex;
           align-items: baseline;
-          gap: 10px;
-          font-size: 22px;
+          gap: 12px;
+          font-size: clamp(24px, 2.4vw, 32px);
           font-weight: 700;
           color: #1A1A1A;
           letter-spacing: -0.02em;
@@ -197,24 +217,24 @@ export default function ShopifyRoot() {
         .ext-modal__compare {
           text-decoration: line-through;
           opacity: 0.45;
-          font-size: 15px;
+          font-size: 18px;
           font-weight: 500;
         }
         .ext-modal__buttons {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 10px;
         }
         .ext-modal__desc {
-          font-size: 13.5px;
+          font-size: 14.5px;
           color: #4A4A4A;
-          line-height: 1.6;
-          padding-top: 14px;
+          line-height: 1.65;
+          padding-top: 18px;
           border-top: 1px solid rgba(26,26,26,.08);
-          max-height: 180px;
+          max-height: 280px;
           overflow-y: auto;
         }
-        .ext-modal__desc p { margin: 0 0 10px; }
+        .ext-modal__desc p { margin: 0 0 12px; }
         .ext-btn {
           font-family: var(--font-geist);
           font-size: 14px;
